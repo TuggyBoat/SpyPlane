@@ -5,7 +5,8 @@ from discord.ext import commands
 from discord_slash.utils.manage_commands import remove_all_commands
 
 from ptn.spyplane.cogs.tick_detection import TickDetection
-from ptn.spyplane.constants import bot_guild_id, TOKEN, get_bot_control_channel, bot, get_tick_detection_channel
+from ptn.spyplane.constants import bot_guild_id, TOKEN, get_bot_control_channel, bot, get_tick_detection_channel, \
+    BGS_BOT_USER_ID
 from ptn.spyplane._metadata import __version__
 
 
@@ -101,12 +102,11 @@ class DiscordBotCommands(commands.Cog):
         print(f'User {ctx.author} requested the version: {__version__}.')
         await ctx.send(f"Bagman is on station and awaiting orders. {self.bot.user.name} is on version: {__version__}.")
 
-    @bot.event
+    @commands.Cog.listener()
     async def on_message(self, msg):
-
-        if msg.channel.id == get_tick_detection_channel():
+        if msg.author.id == bot.user.id:
+            # Skip through, do not try to process the bots own messages or we will loop forever.
+            pass
+        elif msg.author.id == BGS_BOT_USER_ID and msg.channel.id == get_tick_detection_channel():
             # Route this to the tick detection handler
             self.tick.validate_message(msg)
-
-        # We also need to process other messages, so process this here.
-        await bot.process_commands(msg)
