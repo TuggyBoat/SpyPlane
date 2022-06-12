@@ -10,10 +10,15 @@ from dotenv import load_dotenv, find_dotenv
 # because the keys are exposed. DO NOT HOST IN THE REPO. Seriously do not do it ...
 load_dotenv(find_dotenv())
 
+# Common values
+
+BGS_BOT_USER_ID = 332846508888031232
+
 # Production values
 PROD_DISCORD_GUILD = 800080948716503040  # PTN Discord server
 PROD_DB_PATH = os.path.join(os.path.expanduser('~'), 'spyplane', 'spyplane.db')
 PROD_DB_DUMPS_PATH = os.path.join(os.path.expanduser('~'), 'spyplane', 'dumps', 'spyplane.sql')
+PROD_TICK_DETECTION_CHANNEL_ID = 829215577527812096
 
 # TODO: Update this out of #spy-plane
 PROD_SPY_PLANE_CHANNEL_ID = 873124212406099988
@@ -24,6 +29,7 @@ TEST_DB_PATH = os.path.join(os.path.expanduser('~'), 'spyplane', 'spyplane.db')
 TEST_DB_DUMPS_PATH = os.path.join(os.path.expanduser('~'), 'spyplane', 'dumps', 'spyplane.sql')
 
 TEST_SPY_PLANE_CHANNEL_ID = 878369147640234065
+TEST_TICK_DETECTION_CHANNEL_ID = 879041976668946532
 
 _production = ast.literal_eval(os.environ.get('PTN_SPY_PLANE', 'False'))
 
@@ -63,3 +69,13 @@ def get_bot_control_channel():
     :rtype: int
     """
     return PROD_SPY_PLANE_CHANNEL_ID if _production else TEST_SPY_PLANE_CHANNEL_ID
+
+
+def get_tick_detection_channel():
+    """
+    Gets the channel we monitor for the tick detection logics.
+
+    :return: The channel ID
+    :rtype: int
+    """
+    return PROD_TICK_DETECTION_CHANNEL_ID if _production else TEST_TICK_DETECTION_CHANNEL_ID
