@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "spyplane"
+version = "0.1.0"
+description = "PTN Spy Plane"
+authors = ["PTN Devs"]
+
+[tool.poetry.scripts]
+spy = "spyplane.main:run"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+python-dotenv = "^0.20.0"
+"discord.py" = { git = "https://github.com/Rapptz/discord.py", rev = "334ef1d7facce9dbfba2a6924bf57fc59bc827b5" }
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

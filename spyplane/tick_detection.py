@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-from ptn.spyplane.constants import BGS_BOT_USER_ID
+from spyplane.constants import BGS_BOT_USER_ID
 
 
 class TickDetection(commands.Cog):
@@ -21,7 +21,6 @@ class TickDetection(commands.Cog):
             return
 
         # Ok it is from the BGSBot, check if it is a tick message
-
         if 'Tick Detected' not in message and 'Latest Tick At' not in message:
             return
 
