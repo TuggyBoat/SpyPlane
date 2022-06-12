@@ -25,13 +25,12 @@ with io.open(os.path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name=f'{NAMESPACE}.{COMPONENT}',
     version=metadata.__version__,
-    description='Pilots Trade Network Booze Bot',
+    description='PTN Faction Spy Plane',
     long_description=long_description,
-    author='Graeme Cruickshank',
+    author='PTN Time Wasting Team',
     url='',
     install_requires=[
-        'discord',
-        'discord-py-slash-command',
+        'discord@git+https://github.com/Rapptz/discord.py#334ef1d7facce9dbfba2a6924bf57fc59bc827b5',
         'python-dotenv'
     ],
     entry_points={
@@ -39,7 +38,7 @@ setup(
             'spyplane=ptn.spyplane.spy:run',
         ],
     },
-    keyworkd='PTN',
+    keyword='PTN',
     project_urls={
         "Source": "https://github.com/PilotsTradeNetwork/SpyPlane",
     },
