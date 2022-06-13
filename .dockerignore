@@ -1,0 +1,17 @@
+.idea/
+*.iml
+*.csv
+*.json
+*.txt
+!generated_requirements.txt
+!token.json
+*.db
+*.db-journal
+*.gz
+.gitignore
+
+workspace/*
+!workspace/empty.txt
+
+__pycache__
+.venv

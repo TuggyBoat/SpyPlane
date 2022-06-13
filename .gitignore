@@ -1,7 +1,7 @@
 .idea/
 token.json
 *.iml
-
+generated_requirements.txt
 
 
 # Byte-compiled / optimized / DLL files
