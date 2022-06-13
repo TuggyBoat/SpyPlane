@@ -8,6 +8,7 @@ load_dotenv(find_dotenv())
 flag_production = ast.literal_eval(os.environ.get('PRODUCTION', 'False'))
 
 # Common environment variables
+GDRIVE_TOKEN = os.path.join(os.getcwd(), '../token.json')  # CWD = /tests/
 BGS_BOT_USER_ID = os.getenv('BGS_BOT_USER_ID')
 DB_PATH = os.path.join(os.path.expanduser('~'), 'spyplane', 'spyplane.db')
 DB_DUMPS_PATH = os.path.join(os.path.expanduser('~'), 'spyplane', 'dumps', 'spyplane.sql')

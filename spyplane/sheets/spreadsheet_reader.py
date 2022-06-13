@@ -2,9 +2,10 @@ from typing import List
 
 import gspread
 
+from spyplane.constants import GDRIVE_TOKEN
 from spyplane.sheets.scout_system import ScoutSystem
 
-gc = gspread.service_account(filename='/Users/zasz/repos/ptn/SpyPlane/token.json')
+gc = gspread.service_account(filename=GDRIVE_TOKEN)
 
 
 class SpreadsheetReader:

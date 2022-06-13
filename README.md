@@ -15,7 +15,9 @@ poetry config virtualenvs.in-project true
 
 3. `poetry install` the dependencies
 4. Copy `.env.sample` to `.env` and update the values for TEST and PROD
-5. Startup the bot with `poetry run spy`
+5. Contact the dev team to get the token.json that allows connecting to Google Sheets API, 
+and place it in the repo root.
+6. Startup the bot with `poetry run spy`
 
 ## Google Drive Setup
 
