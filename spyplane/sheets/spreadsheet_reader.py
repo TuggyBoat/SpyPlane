@@ -16,4 +16,4 @@ class SpreadsheetReader:
     def read_whole_sheet(self) -> List[ScoutSystem]:
         wks = gc.open(self.sheet_name).sheet1
         list_of_lists = wks.get_all_values()
-        return [ScoutSystem(row[0], row[1]) for row in list_of_lists]
+        return [ScoutSystem(row[0].strip(), row[1].strip()) for row in list_of_lists]

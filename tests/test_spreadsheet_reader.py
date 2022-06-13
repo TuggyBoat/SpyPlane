@@ -17,8 +17,8 @@ class SpreadsheetReaderTests(unittest.TestCase):
         scout_system_list: List[ScoutSystem] = self.subject.read_whole_sheet()
         for scout in scout_system_list:
             print(scout)
-        self.assertEqual(True, True)  # TODO: add assertion here
+        self.assertTrue("Col 285 Sector OT-G c11-6" in [scout_system.system for scout_system in scout_system_list])
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
     unittest.main()
