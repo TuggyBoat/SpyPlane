@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -eux
 
-python run spy
+python -m spyplane.main

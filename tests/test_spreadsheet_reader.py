@@ -18,6 +18,7 @@ class SpreadsheetReaderTests(unittest.TestCase):
         for scout in scout_system_list:
             print(scout)
         self.assertTrue("Col 285 Sector OT-G c11-6" in [scout_system.system for scout_system in scout_system_list])
+        self.assertTrue("System" not in [scout_system.system for scout_system in scout_system_list])
 
 
 if __name__=='__main__':
