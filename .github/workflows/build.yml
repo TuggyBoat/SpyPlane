@@ -17,6 +17,5 @@ jobs:
           gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
           registry: asia.gcr.io
           project_id: pilotstradenetwork
-          image_name: spy_plane
+          image_name: spyplane
           image_tag: ${{ steps.get_tag_name.outputs.GIT_TAG_NAME}},latest
-          context: spyplane
