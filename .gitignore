@@ -1,6 +1,15 @@
 .idea/
 token.json
 *.iml
+*.csv
+*.json
+*.jsonl
+!data/
+*.txt
+!requirements.txt
+*.db
+*.gz
+*.db-journal
 
 
 # Byte-compiled / optimized / DLL files

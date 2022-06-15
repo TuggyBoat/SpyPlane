@@ -2,13 +2,13 @@ import unittest
 from typing import List
 
 from spyplane.sheets.scout_system import ScoutSystem
-from spyplane.sheets.spreadsheet_reader import SpreadsheetReader
+from spyplane.sheets.spreadsheet_helper import SpreadsheetHelper
 
 
 class SpreadsheetReaderTests(unittest.TestCase):
 
     def setUp(self) -> None:
-        self.subject = SpreadsheetReader()
+        self.subject = SpreadsheetHelper()
 
     def tearDown(self) -> None:
         pass
@@ -23,3 +23,7 @@ class SpreadsheetReaderTests(unittest.TestCase):
 
 if __name__=='__main__':
     unittest.main()
+Velas︎
+
+
+Velas︎

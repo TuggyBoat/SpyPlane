@@ -1,6 +1,6 @@
 from spyplane._metadata import __version__
 from spyplane.messaging.systems_posting import SystemsPosting
-from spyplane.sheets.spreadsheet_reader import SpreadsheetReader
+from spyplane.sheets.spreadsheet_helper import SpreadsheetHelper
 from spyplane.spy_plane import bot
 from discord import Interaction, app_commands
 
@@ -27,9 +27,14 @@ async def version(interaction: Interaction):
 async def post_systems(interaction: Interaction):
     """Post systems to scout"""
     print(f'User {interaction.user.name} is posting the systems to scout: {__version__}.')
-    await interaction.response.defer()
-    systems_to_scout = SpreadsheetReader().read_whole_sheet()
     await SystemsPosting(interaction.channel).publish_systems_to_scout(systems_to_scout)
+
+@bot.tree.command(name='spy_plane_sync', description="syncs the db to sheets")
+async def sync_systems(interaction: Interaction):
+    """Post systems to scout"""
+    print(f'User {interaction.user.name} is syncing the DB with sheet on systems to scout: {__version__}.')
+    await interaction.response.defer()
+    systems_to_scout = SpreadsheetHelper().read_whole_sheet()
     await interaction.followup.send(f"Spy plane is on the move!")
 
 @bot.tree.command(name='spy_plane_emoji', description="Utility to test the emoji availability in a server")

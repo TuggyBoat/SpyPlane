@@ -11,7 +11,8 @@ cat /app/spyplane_env.list
 
 docker run \
         -d \
-        --env-file /app/spyplane_env.list \
+        -v /spy/workspace:/app/workspace \
+        --env-file /spy/env.list \
         --name spyplane_flight \
         --restart unless-stopped \
         asia.gcr.io/pilotstradenetwork/spyplane:latest
