@@ -1,6 +1,7 @@
 from spyplane._metadata import __version__
+from spyplane.database.systems_repository import SystemsRepository
 from spyplane.messaging.systems_posting import SystemsPosting
-from spyplane.sheets.spreadsheet_helper import SpreadsheetHelper
+from spyplane.services.sync_service import SyncService
 from spyplane.spy_plane import bot
 from discord import Interaction, app_commands
 
@@ -26,22 +27,26 @@ async def version(interaction: Interaction):
 @bot.tree.command(name='spy_plane_launch', description="Posts the systems to scout")
 async def post_systems(interaction: Interaction):
     """Post systems to scout"""
+    await interaction.response.defer()
     print(f'User {interaction.user.name} is posting the systems to scout: {__version__}.')
-    await SystemsPosting(interaction.channel).publish_systems_to_scout(systems_to_scout)
+    valid_systems = SystemsRepository().get_valid_systems()
+    posting = SystemsPosting(interaction.channel)
+    await posting.publish_systems_to_scout(valid_systems)
+    await interaction.followup.send(f"Spy plane is now on the prowl!")
 
 @bot.tree.command(name='spy_plane_sync', description="syncs the db to sheets")
 async def sync_systems(interaction: Interaction):
     """Post systems to scout"""
     print(f'User {interaction.user.name} is syncing the DB with sheet on systems to scout: {__version__}.')
     await interaction.response.defer()
-    systems_to_scout = SpreadsheetHelper().read_whole_sheet()
-    await interaction.followup.send(f"Spy plane is on the move!")
+    SyncService().sync_db_sheet()
+    await interaction.followup.send(f"Spy plane is fueled and ready to go")
 
 @bot.tree.command(name='spy_plane_emoji', description="Utility to test the emoji availability in a server")
 @app_commands.describe(
     id='Emoji ID'
 )
-async def post_systems(interaction: Interaction, id: str):
+async def emoji_test_utility(interaction: Interaction, id: str):
     """Post systems to scout"""
     emoji = bot.get_emoji(int(id))
     message = await interaction.channel.send(f'Emoji for ID: {emoji}')

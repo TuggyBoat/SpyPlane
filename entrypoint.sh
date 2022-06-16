@@ -2,7 +2,7 @@
 set -eux
 
 if [[ -z "${DB_RECREATE-}" ]]; then
-  echo "DB_RECREATE was NOT defined, not creating a new DB"
+  echo "Not creating a new DB"
 else
   echo "DB_RECREATE: ${DB_RECREATE} is defined, creating a new DB"
   rm -rf ./workspace/spyplane.db

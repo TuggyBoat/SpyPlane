@@ -9,6 +9,7 @@
 *.db-journal
 *.gz
 .gitignore
+.env
 
 workspace/*
 !workspace/empty.txt

@@ -7,11 +7,12 @@ docker stop spyplane_flight || true && docker rm spyplane_flight || true
 
 # If you face permissions during pull in gcloud VM, just run `docker-credential-gcr configure-docker`
 
-cat /app/spyplane_env.list
+cat /spy/env.list
 
 docker run \
         -d \
         -v /spy/workspace:/app/workspace \
+        -e DB_RECREATE \
         --env-file /spy/env.list \
         --name spyplane_flight \
         --restart unless-stopped \

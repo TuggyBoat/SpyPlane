@@ -24,6 +24,16 @@ class SpreadsheetHelper:
                 }
             })
 
+    def mark_row_valid(self, indexes: List[int]):
+        for i in indexes:
+            self.wks.format(f"A{i+1}:B{i+1}", {
+                "backgroundColor": {
+                    "red": 0.56,
+                    "green": 0.93,
+                    "blue": 0.56
+                }
+            })
+
     def read_whole_sheet(self) -> List[ScoutSystem]:
         list_of_lists = self.wks.get_all_values()
         ss_list = []
