@@ -39,6 +39,7 @@ async def sync_systems(interaction: Interaction):
     """Post systems to scout"""
     print(f'User {interaction.user.name} is syncing the DB with sheet on systems to scout: {__version__}.')
     await interaction.response.defer()
+    # sqlite3 operations needs to run in same thread that it was created on
     SyncService().sync_db_sheet()
     await interaction.followup.send(f"Spy plane is fueled and ready to go")
 

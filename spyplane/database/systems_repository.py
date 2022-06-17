@@ -6,6 +6,11 @@ from ..sheets.scout_system import ScoutSystem
 insert_scout_system = '''
 insert into scout_systems (system_name, priority, rownum) values (?,?,?);
 '''
+select_scout_system = '''
+select * 
+from scout_systems 
+where system_name = ?;
+'''
 
 get_valid_systems_query = '''
 select s.system_name, s.priority, s.rownum 
@@ -40,6 +45,13 @@ class SystemsRepository:
 
     def get_valid_systems(self) -> List[ScoutSystem]:
         return self.get_systems(get_valid_systems_query)
+
+    def get_system(self, system_name) -> ScoutSystem:
+        cur = self.connection.cursor()
+        row = cur.execute(select_scout_system, [system_name]).fetchone()
+        system = ScoutSystem(row[0], row[1], row[2])
+        cur.close()
+        return system
 
     def get_systems(self, query) -> List[ScoutSystem]:
         cur = self.connection.cursor()

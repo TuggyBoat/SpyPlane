@@ -19,3 +19,6 @@ class SyncService:
         invalid_scouts_actual: List[ScoutSystem] = self.repo.get_invalid_systems()
         self.sheets.mark_row_invalid([system.rownum for system in invalid_scouts_actual])
         self.sheets.mark_row_valid([system.rownum for system in valid_scouts_actual])
+
+    async def update_sheet(self, rownum, user_name, user_id):
+        pass
