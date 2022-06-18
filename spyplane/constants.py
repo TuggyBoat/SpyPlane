@@ -12,7 +12,7 @@ GDRIVE_TOKEN = os.path.join(os.getcwd(), 'token.json') if "/tests" not in os.get
 BGS_BOT_USER_ID = os.getenv('BGS_BOT_USER_ID')
 
 # Environment specific vars
-EMOJI_BULLSEYE = 987086894032646205  # PTN test server :assassin:
+EMOJI_BULLSEYE = 848957573792137247  # PTN test server :assassin:
 TOKEN = os.getenv('SPYPLANE_DISCORD_TOKEN_PROD') if flag_production else os.getenv('SPYPLANE_DISCORD_TOKEN_TESTING')
 APPLICATION_ID = os.getenv('APPLICATION_ID_PROD') if flag_production else os.getenv('APPLICATION_ID_TESTING')
 GUILD_ID = os.getenv('PROD_DISCORD_GUILD') if flag_production else os.getenv('TEST_DISCORD_GUILD')
