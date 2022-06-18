@@ -23,18 +23,19 @@ class SystemsPostingService:
         emoji_bullseye = bot.get_emoji(EMOJI_BULLSEYE)
         await self.channel.purge(check=is_not_pinned_message)
         splits = split_valid_systems(valid_systems, datetime.datetime.today().weekday())
-        for scout_system in splits['Primary']:
-            message = await self.channel.send(scout_system.system)
-            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
-        await self.channel.send("__**Secondary List**__")
-        for scout_system in splits['Secondary']:
-            message = await self.channel.send(scout_system.system)
-            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
-        await self.channel.send("__**Tertiary List**__")
-        for scout_system in splits['Tertiary']:
-            message = await self.channel.send(scout_system.system)
-            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
+        await self.post_list(emoji_bullseye, splits, 'Primary')
+        await self.post_list(emoji_bullseye, splits, 'Secondary')
+        await self.post_list(emoji_bullseye, splits, 'Tertiary')
         await self.channel.send(f"<@&{FACTION_SCOUT_ROLE_ID}> List Updated")
+
+    async def post_list(self, emoji_bullseye, splits, priority_string):
+        if len(splits[priority_string]) and priority_string!='Primary':
+            await self.channel.send(f"__**{priority_string} List**__")
+        for scout_system in splits[priority_string]:
+            message = await self.channel.send(scout_system.system)
+            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
+        else:
+            print(f'Empty {priority_string} List')
 
 
 def is_not_pinned_message(message: discord.message.Message) -> bool:
