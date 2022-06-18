@@ -11,6 +11,7 @@ spy = "spyplane.main:run"
 python = "^3.9"
 python-dotenv = "^0.20.0"
 "discord.py" = { git = "https://github.com/Rapptz/discord.py", rev = "334ef1d7facce9dbfba2a6924bf57fc59bc827b5" }
+aiosqlite = "^0.17.0"
 gspread = "^5.4.0"
 
 [tool.poetry.dev-dependencies]

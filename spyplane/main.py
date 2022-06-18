@@ -10,5 +10,5 @@ def run():
     bot.run(TOKEN)
 
 
-if __name__ == '__main__':
+if __name__=='__main__':
     run()

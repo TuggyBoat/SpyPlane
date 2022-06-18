@@ -1,5 +1,6 @@
-import sqlite3
 from typing import List
+
+from aiosqlite import Connection
 
 from ..sheets.scout_system import ScoutSystem
 
@@ -13,7 +14,7 @@ where system_name = ?;
 '''
 
 get_valid_systems_query = '''
-select s.system_name, s.priority, s.rownum 
+select s.system_name, s.priority, s.rownum ō
 from scout_systems s 
 join systems m on s.system_name = m.name
 where s.priority != '' and printf("%d", s.priority) = s.priority
@@ -35,42 +36,36 @@ where m.system_name is null;
 
 class SystemsRepository:
 
-    def __init__(self, path='./workspace/spyplane.db'):
-        self.connection = sqlite3.connect(path)
-        self.connection.set_trace_callback(print)
-        self.exec = self.connection.execute
+    def __init__(self):
+        self.db = None
 
-    def get_invalid_systems(self) -> List[ScoutSystem]:
-        return self.get_systems(get_invalid_systems_query % get_valid_systems_query)
+    async def init(self, db: Connection):
+        await db.set_trace_callback(print)
+        self.db = db
 
-    def get_valid_systems(self) -> List[ScoutSystem]:
-        return self.get_systems(get_valid_systems_query)
+    async def get_invalid_systems(self) -> List[ScoutSystem]:
+        return await self.get_systems(get_invalid_systems_query % get_valid_systems_query)
 
-    def get_system(self, system_name) -> ScoutSystem:
-        cur = self.connection.cursor()
-        row = cur.execute(select_scout_system, [system_name]).fetchone()
-        system = ScoutSystem(row[0], row[1], row[2])
-        cur.close()
-        return system
+    async def get_valid_systems(self) -> List[ScoutSystem]:
+        return await self.get_systems(get_valid_systems_query)
 
-    def get_systems(self, query) -> List[ScoutSystem]:
-        cur = self.connection.cursor()
-        rows = cur.execute(query).fetchall()
-        systems = [ScoutSystem(row[0], row[1], row[2]) for row in rows]
-        cur.close()
-        return systems
+    async def get_system(self, system_name) -> ScoutSystem:
+        async with self.db.execute(select_scout_system, [system_name]) as cur:
+            row = await cur.fetchone()
+        return ScoutSystem(row[0], row[1], row[2])
 
-    def write_system_to_scout(self, systems_to_scout: List[ScoutSystem], commit=True):
-        cur = self.connection.cursor()
-        cur.execute(purge_scout_table)
-        for system in systems_to_scout:
-            cur.execute(insert_scout_system, (system.system, system.priority, system.rownum))
-        if commit:
-            self.connection.commit()
-        cur.close()
+    async def get_systems(self, query) -> List[ScoutSystem]:
+        async with self.db.execute(query) as cur:
+            rows = await cur.fetchall()
+        return [ScoutSystem(row[0], row[1], row[2]) for row in rows]
 
-    def begin_transaction(self):
-        self.exec("BEGIN")
+    async def write_system_to_scout(self, systems_to_scout: List[ScoutSystem], commit=True):
+        await self.db.execute("BEGIN")
+        async with self.db.execute(purge_scout_table) as cur:
+            for system in systems_to_scout:
+                await cur.execute(insert_scout_system, (system.system, system.priority, system.rownum))
+            if commit:
+                await self.db.commit()
 
-    def rollback_transaction(self):
-        self.exec("ROLLBACK")
+    async def rollback(self):
+        await self.db.execute("ROLLBACK")

@@ -17,7 +17,7 @@ class TickDetection(commands.Cog):
         # whether the message is a 'tick' message or not
 
         # Ensure this is from the bot user account
-        if message.author.id != BGS_BOT_USER_ID:
+        if message.author.id!=BGS_BOT_USER_ID:
             return
 
         # Ok it is from the BGSBot, check if it is a tick message

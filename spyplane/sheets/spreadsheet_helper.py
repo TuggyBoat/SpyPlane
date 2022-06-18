@@ -1,3 +1,4 @@
+import unicodedata
 from typing import List
 
 import gspread
@@ -16,9 +17,9 @@ class SpreadsheetHelper:
 
     def mark_row_invalid(self, indexes: List[int]):
         for i in indexes:
-            self.wks.format(f"A{i+1}:B{i+1}", {
+            self.wks.format(f"A{i + 1}:B{i + 1}", {
                 "backgroundColor": {
-                    "red": 1.0,
+                    "red": 0.957,
                     "green": 0.8,
                     "blue": 0.8
                 }
@@ -26,18 +27,25 @@ class SpreadsheetHelper:
 
     def mark_row_valid(self, indexes: List[int]):
         for i in indexes:
-            self.wks.format(f"A{i+1}:B{i+1}", {
+            self.wks.format(f"A{i + 1}:B{i + 1}", {
                 "backgroundColor": {
-                    "red": 0.56,
-                    "green": 0.93,
-                    "blue": 0.56
+                    "red": 0.85,
+                    "green": 0.918,
+                    "blue": 0.827
                 }
             })
+
+    def mark_row_scout(self, rownum, user_name, user_id):
+        self.wks.update(f"C{rownum + 1}", [[user_name, str(user_id)]])
 
     def read_whole_sheet(self) -> List[ScoutSystem]:
         list_of_lists = self.wks.get_all_values()
         ss_list = []
         for index, row in enumerate(list_of_lists):
             if row[0].strip()!="System":
-                ss_list.append(ScoutSystem(row[0].strip(), row[1].strip(), index))
+                ss_list.append(ScoutSystem(clean(row[0]), clean(row[1]), index))
         return ss_list
+
+
+def clean(s: str):
+    return "".join(ch for ch in s.strip() if unicodedata.category(ch)[0] not in ["C", "M"])
