@@ -1,9 +1,12 @@
+from typing import List, Dict, cast
+
 import aiosqlite
 import discord.message
-from discord import MessageType
+import datetime
 
-from spyplane.constants import EMOJI_BULLSEYE, DB_PATH
+from spyplane.constants import EMOJI_BULLSEYE, DB_PATH, FACTION_SCOUT_ROLE_ID
 from spyplane.database.systems_repository import SystemsRepository
+from spyplane.sheets.scout_system import ScoutSystem
 from spyplane.spy_plane import bot
 
 
@@ -18,11 +21,42 @@ class SystemsPostingService:
             await repo.init(db)
             valid_systems = await repo.get_valid_systems()
         emoji_bullseye = bot.get_emoji(EMOJI_BULLSEYE)
-        await self.channel.purge(check=self.is_not_pinned_message)
-        for scout_system in valid_systems:
+        await self.channel.purge(check=is_not_pinned_message)
+        splits = split_valid_systems(valid_systems, datetime.datetime.today().weekday())
+        for scout_system in splits['Primary']:
             message = await self.channel.send(scout_system.system)
             await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
+        await self.channel.send("__**Secondary List**__")
+        for scout_system in splits['Secondary']:
+            message = await self.channel.send(scout_system.system)
+            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
+        await self.channel.send("__**Tertiary List**__")
+        for scout_system in splits['Tertiary']:
+            message = await self.channel.send(scout_system.system)
+            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
+        await self.channel.send(f"<@&{FACTION_SCOUT_ROLE_ID}> List Updated")
 
-    @staticmethod
-    def is_not_pinned_message(message: discord.message.Message) -> bool:
-        return not message.pinned and message.type!=MessageType.chat_input_command
+
+def is_not_pinned_message(message: discord.message.Message) -> bool:
+    return not message.pinned
+
+
+def split_valid_systems(systems: List[ScoutSystem], day_of_week: int) -> Dict[str, List[ScoutSystem]]:
+    # TODO: use a db sequence instead of day of week.
+    splits = {
+        'Primary': [s for s in systems if int(s.priority)==1],
+        'Secondary': [s for s in systems if int(s.priority)==2],
+        'Tertiary': [s for s in systems if int(s.priority) > 2]
+    }
+    every_other_day = list(split(splits['Secondary'], 2))
+    every_third_day = list(split(splits['Tertiary'], 3))
+    return {
+        'Primary': splits['Primary'],
+        'Secondary': cast(List[ScoutSystem], every_other_day[day_of_week % 2]),
+        'Tertiary': cast(List[ScoutSystem], every_third_day[day_of_week % 3])
+    }
+
+
+def split(a, n):  # https://stackoverflow.com/questions/2130016/splitting-a-list-into-n-parts-of-approximately-equal-length
+    k, m = divmod(len(a), n)
+    return (a[i * k + min(i, m):(i + 1) * k + min(i + 1, m)] for i in range(n))

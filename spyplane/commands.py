@@ -30,7 +30,7 @@ async def version(interaction: Interaction):
 @bot.tree.command(name='spy_plane_launch', description="Posts the systems to scout")
 async def post_systems(interaction: Interaction):
     """Post systems to scout"""
-    await interaction.response.defer()
+    await interaction.response.defer(ephemeral=True)
     print(f'User {interaction.user.name} is posting the systems to scout: {__version__}.')
     await SystemsPostingService(interaction.channel).publish_systems_to_scout()
     await interaction.followup.send(f"Spy plane is now on the prowl!")
