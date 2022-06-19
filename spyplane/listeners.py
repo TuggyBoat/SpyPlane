@@ -83,4 +83,4 @@ async def on_message(msg):
         pass
     elif msg.author.id==BGS_BOT_USER_ID and msg.channel.id==TICK_CHANNEL:
         # Route this to the tick detection handler
-        TickDetection().validate_message(msg)
+        await TickDetection().validate_message(msg)
