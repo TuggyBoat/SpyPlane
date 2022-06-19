@@ -42,8 +42,10 @@ class SpreadsheetHelper:
         list_of_lists = self.wks.get_all_values()
         ss_list = []
         for index, row in enumerate(list_of_lists):
-            if row[0].strip()!="System":
-                ss_list.append(ScoutSystem(clean(row[0]), clean(row[1]), index))
+            column_a = clean(row[0])
+            column_b = clean(row[1])
+            if column_a!="System" and not column_a.startswith('#'):
+                ss_list.append(ScoutSystem(column_a, column_b, index))
         return ss_list
 
 

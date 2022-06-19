@@ -31,11 +31,12 @@ class SystemsPostingService:
         await self.channel.send(f"<@&{FACTION_SCOUT_ROLE_ID}> List Updated")
 
     async def post_list(self, emoji_bullseye, splits, priority_string):
-        if len(splits[priority_string]) and priority_string!='Primary':
-            await self.channel.send(f"__**{priority_string} List**__")
-        for scout_system in splits[priority_string]:
-            message = await self.channel.send(scout_system.system)
-            await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
+        if len(splits[priority_string]):
+            if priority_string!='Primary':
+                await self.channel.send(f"__**{priority_string} List**__")
+            for scout_system in splits[priority_string]:
+                message = await self.channel.send(scout_system.system)
+                await message.add_reaction('✅' if emoji_bullseye is None else emoji_bullseye)
         else:
             print(f'Empty {priority_string} List')
 
