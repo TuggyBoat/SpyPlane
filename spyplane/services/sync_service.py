@@ -4,7 +4,7 @@ import aiosqlite
 
 from spyplane.constants import DB_PATH
 from spyplane.database.systems_repository import SystemsRepository
-from spyplane.sheets.scout_system import ScoutSystem
+from spyplane.models.scout_system import ScoutSystem
 from spyplane.sheets.spreadsheet_helper import SpreadsheetHelper
 from spyplane.spy_plane import bot
 

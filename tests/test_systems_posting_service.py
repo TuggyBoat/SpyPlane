@@ -2,7 +2,7 @@ import unittest
 from typing import List
 
 from spyplane.services.systems_posting_service import SystemsPostingService, split_valid_systems
-from spyplane.sheets.scout_system import ScoutSystem
+from spyplane.models.scout_system import ScoutSystem
 
 
 class SystemsPostingServiceTests(unittest.TestCase):

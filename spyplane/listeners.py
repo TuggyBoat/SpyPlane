@@ -5,6 +5,7 @@ from discord import RawReactionActionEvent
 
 from spyplane._metadata import __version__
 from spyplane.constants import CONTROL_CHANNEL, TICK_CHANNEL, BGS_BOT_USER_ID, EMOJI_BULLSEYE, DB_PATH
+from spyplane.database.scout_history_repository import ScoutHistoryRepository
 from spyplane.database.systems_repository import SystemsRepository
 from spyplane.services.sync_service import SyncService
 from spyplane.spy_plane import bot
@@ -61,15 +62,15 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
     print(f"Content: {message.content}")
     try:
         repo = SystemsRepository()
+        history_repo = ScoutHistoryRepository()
         async with aiosqlite.connect(DB_PATH) as db:
             await repo.init(db)
+            await history_repo.init(db)
             system = await repo.get_system(message.content)
-    except Exception as e:
-        print("OnReaction: Error when fetching system from DB")
-        print(e)
-    await message.delete()
-    try:
-        await SyncService().mark_row_scout(system, payload.member.name, payload.member.id)
+            await history_repo.record_scout(system, payload.member.name, payload.member.id)
+            await message.delete()
+            await SyncService().mark_row_scout(system, payload.member.name, payload.member.id)
+            await db.commit()
     except Exception as e:
         print("OnReaction: Error when updating sheet")
         print(e)

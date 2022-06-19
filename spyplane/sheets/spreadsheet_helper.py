@@ -4,7 +4,7 @@ from typing import List
 import gspread
 
 from spyplane.constants import GDRIVE_TOKEN
-from spyplane.sheets.scout_system import ScoutSystem
+from spyplane.models.scout_system import ScoutSystem
 
 gc = gspread.service_account(filename=GDRIVE_TOKEN)
 

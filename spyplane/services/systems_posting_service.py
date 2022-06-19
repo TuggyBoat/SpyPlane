@@ -6,7 +6,7 @@ import discord.message
 
 from spyplane.constants import EMOJI_BULLSEYE, DB_PATH, FACTION_SCOUT_ROLE_ID
 from spyplane.database.systems_repository import SystemsRepository
-from spyplane.sheets.scout_system import ScoutSystem
+from spyplane.models.scout_system import ScoutSystem
 from spyplane.spy_plane import bot
 
 

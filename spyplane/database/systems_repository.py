@@ -2,20 +2,20 @@ from typing import List
 
 from aiosqlite import Connection
 
-from ..sheets.scout_system import ScoutSystem
+from spyplane.models.scout_system import ScoutSystem
 
 insert_scout_system = '''
 insert into scout_systems (system_name, priority, rownum) values (?,?,?);
 '''
 select_scout_system = '''
-select * 
-from scout_systems 
+select *
+from scout_systems
 where system_name = ?;
 '''
 
 get_valid_systems_query = '''
 select s.system_name, s.priority, s.rownum ō
-from scout_systems s 
+from scout_systems s
 join systems m on s.system_name = m.name
 where s.priority != '' and printf("%d", s.priority) = s.priority
 '''
@@ -25,8 +25,8 @@ delete from scout_systems
 '''
 
 get_invalid_systems_query = '''
-select ss.system_name, ss.priority, ss.rownum 
-from scout_systems ss 
+select ss.system_name, ss.priority, ss.rownum
+from scout_systems ss
 left join (
 %s
 ) m on ss.system_name = m.system_name

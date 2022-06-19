@@ -6,7 +6,7 @@ import aiosqlite
 
 from spyplane.constants import DB_PATH
 from spyplane.database.systems_repository import SystemsRepository
-from spyplane.sheets.scout_system import ScoutSystem
+from spyplane.models.scout_system import ScoutSystem
 
 
 class SystemsRepositoryTests(IsolatedAsyncioTestCase):
@@ -51,7 +51,3 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
             system: ScoutSystem = await self.subject.get_system('Velas')
             await self.subject.rollback()
         self.assertEqual("Velas", system.system)
-
-
-if __name__=='__main__':
-    unittest.main()
