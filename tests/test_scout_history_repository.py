@@ -2,25 +2,26 @@ import datetime
 from typing import List
 from unittest import IsolatedAsyncioTestCase
 
-import aiosqlite
-
-from spyplane.constants import DB_PATH
 from spyplane.database.scout_history_repository import ScoutHistoryRepository
 from spyplane.models.scout_history import ScoutHistory
 from spyplane.models.scout_system import ScoutSystem
+from spyplane.spy_plane import bot
 
 
 class ScoutHistoryRepositoryTests(IsolatedAsyncioTestCase):
 
     async def asyncSetUp(self) -> None:
+        await bot.dbinit()
         self.subject = ScoutHistoryRepository()
+        await self.subject.begin()
+
+    async def asyncTearDown(self):
+        await self.subject.rollback()
+        await bot.dbclose()
 
     async def test_record_scout(self):
-        async with aiosqlite.connect(DB_PATH) as db:
-            await self.subject.init(db)
-            await self.subject.record_scout(ScoutSystem('Volowahku', '1', 3), "zaszrespawned", 354990093980663889)
-            history: List[ScoutHistory] = await self.subject.get_history(username="zaszrespawned")
-            await self.subject.rollback()
+        await self.subject.record_scout(ScoutSystem('Volowahku', '1', 3), "zaszrespawned", 354990093980663889)
+        history: List[ScoutHistory] = await self.subject.get_history(username="zaszrespawned")
         for scout in history:
             print(scout)
         self.assertEqual(len(history), 1)

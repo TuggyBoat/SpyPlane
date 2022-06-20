@@ -1,27 +1,22 @@
 import time
 from datetime import datetime
 
-import aiosqlite
 import discord
 from discord import Color, Embed
 
-from spyplane.constants import DB_PATH
 from spyplane.database.config_repository import ConfigRepository
 
 
 class ConfigService:
-    def __init__(self):
-        pass
+    def __init__(self, repo=ConfigRepository()):
+        self.repo = repo
 
-    @staticmethod
-    async def dump_config_embed() -> Embed:
-        repo = ConfigRepository()
+
+    async def dump_config_embed(self) -> Embed:
         embed = ConfigService.common_embed_setup(None, 'Configuration')
-        async with aiosqlite.connect(DB_PATH) as db:
-            await repo.init(db)
-            config_dump = await repo.dump_config()
-            for config in config_dump:
-                embed.add_field(name=config.name, value=config.value, inline=False)
+        config_dump = await self.repo.dump_config()
+        for config in config_dump:
+            embed.add_field(name=config.name, value=config.value, inline=False)
         return embed
 
     @staticmethod

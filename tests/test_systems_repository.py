@@ -1,27 +1,29 @@
 from typing import List
 from unittest import IsolatedAsyncioTestCase
 
-import aiosqlite
-
-from spyplane.constants import DB_PATH
 from spyplane.database.systems_repository import SystemsRepository
 from spyplane.models.scout_system import ScoutSystem
+from spyplane.spy_plane import bot
 
 
 class SystemsRepositoryTests(IsolatedAsyncioTestCase):
 
     async def asyncSetUp(self) -> None:
+        await bot.dbinit()
         self.subject = SystemsRepository()
         self.test_scouts = [
             ScoutSystem('Velas', '1', 2), ScoutSystem('Volowahku', '1', 3),
             ScoutSystem('Vela1s', '1', 2), ScoutSystem('Wader', 'blah', 3)
         ]
+        await self.subject.begin()
+
+    async def asyncTearDown(self):
+        await self.subject.rollback()
+        await bot.dbclose()
 
     async def test_get_valid_systems(self):
-        async with aiosqlite.connect(DB_PATH) as db:
-            await self.subject.init(db)
-            await self.subject.write_system_to_scout(self.test_scouts, commit=False)
-            valid_scouts_actual: List[ScoutSystem] = await self.subject.get_valid_systems()
+        await self.subject.write_system_to_scout(self.test_scouts)
+        valid_scouts_actual: List[ScoutSystem] = await self.subject.get_valid_systems()
         for scout in valid_scouts_actual:
             print(scout)
         actual_systems_to_scout = [scout_system.system for scout_system in valid_scouts_actual]
@@ -31,10 +33,8 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertTrue("Wader" not in actual_systems_to_scout)
 
     async def test_get_invalid_systems(self):
-        async with aiosqlite.connect(DB_PATH) as db:
-            await self.subject.init(db)
-            await self.subject.write_system_to_scout(self.test_scouts, commit=False)
-            invalid_scouts_actual: List[ScoutSystem] = await self.subject.get_invalid_systems()
+        await self.subject.write_system_to_scout(self.test_scouts)
+        invalid_scouts_actual: List[ScoutSystem] = await self.subject.get_invalid_systems()
         for scout in invalid_scouts_actual:
             print(scout)
         systems_to_flag = [scout_system.system for scout_system in invalid_scouts_actual]
@@ -44,9 +44,13 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertTrue("Wader" in systems_to_flag)
 
     async def test_get_system(self):
-        async with aiosqlite.connect(DB_PATH) as db:
-            await self.subject.init(db)
-            await self.subject.write_system_to_scout(self.test_scouts, commit=False)
-            system: ScoutSystem = await self.subject.get_system('Velas')
-            await self.subject.rollback()
+        await self.subject.write_system_to_scout(self.test_scouts)
+        system: ScoutSystem = await self.subject.get_system('Velas')
         self.assertEqual("Velas", system.system)
+
+    async def test_purge(self):
+        await self.subject.purge_scout_systems()
+        valid = await self.subject.get_valid_systems()
+        invalid = await self.subject.get_valid_systems()
+        self.assertEqual(0, len(valid))
+        self.assertEqual(0, len(invalid))

@@ -1,27 +1,46 @@
 from typing import List
 
-from aiosqlite import Connection
-
+from spyplane.database.base_repository import BaseRepository
 from spyplane.models.scout_system import ScoutSystem
 
 insert_scout_system = '''
 insert into scout_systems (system_name, priority, rownum) values (?,?,?);
 '''
+insert_post_system = '''
+insert or ignore into scout_systems_posted (system_name, priority, rownum) values (?,?,?);
+'''
+update_post_system = '''
+update scout_systems_posted set priority=?, rownum=? where system_name=?;
+'''
 select_scout_system = '''
 select *
 from scout_systems
-where system_name = ?;
+where system_name=?;
 '''
 
 get_valid_systems_query = '''
-select s.system_name, s.priority, s.rownum ō
+select s.system_name, s.priority, s.rownum
 from scout_systems s
 join systems m on s.system_name = m.name
 where s.priority != '' and printf("%d", s.priority) = s.priority
+order by rownum
 '''
 
-purge_scout_table = '''
+remove_scouted_system = '''
+delete from scout_systems_posted where system_name=?
+'''
+
+purge_scout = '''
 delete from scout_systems
+'''
+
+purge_posted = '''
+delete from scout_systems_posted
+'''
+
+get_post_systems = '''
+select s.system_name, s.priority, s.rownum
+from scout_systems_posted s
 '''
 
 get_invalid_systems_query = '''
@@ -34,14 +53,7 @@ where m.system_name is null;
 '''
 
 
-class SystemsRepository:
-
-    def __init__(self):
-        self.db = None
-
-    async def init(self, db: Connection):
-        await db.set_trace_callback(print)
-        self.db = db
+class SystemsRepository(BaseRepository):
 
     async def get_invalid_systems(self) -> List[ScoutSystem]:
         return await self.get_systems(get_invalid_systems_query % get_valid_systems_query)
@@ -49,23 +61,33 @@ class SystemsRepository:
     async def get_valid_systems(self) -> List[ScoutSystem]:
         return await self.get_systems(get_valid_systems_query)
 
+    async def get_carryover_systems(self) -> List[ScoutSystem]:
+        return await self.get_systems(get_post_systems)
+
     async def get_system(self, system_name) -> ScoutSystem:
-        async with self.db.execute(select_scout_system, [system_name]) as cur:
+        async with self.db().execute(select_scout_system, [system_name]) as cur:
             row = await cur.fetchone()
         return ScoutSystem(row[0], row[1], row[2])
 
+    async def purge_scout_systems(self) -> None:
+        await self.db().execute(purge_scout)
+
+    async def remove_scouted(self, system_name) -> None:
+        await self.db().execute(remove_scouted_system, [system_name])
+        print(f"Removed scout: {system_name}")
+
     async def get_systems(self, query) -> List[ScoutSystem]:
-        async with self.db.execute(query) as cur:
+        async with self.db().execute(query) as cur:
             rows = await cur.fetchall()
         return [ScoutSystem(row[0], row[1], row[2]) for row in rows]
 
-    async def write_system_to_scout(self, systems_to_scout: List[ScoutSystem], commit=True):
-        await self.db.execute("BEGIN")
-        async with self.db.execute(purge_scout_table) as cur:
-            for system in systems_to_scout:
-                await cur.execute(insert_scout_system, (system.system, system.priority, system.rownum))
-            if commit:
-                await self.db.commit()
+    async def write_system_to_post(self, systems_to_scout: List[ScoutSystem]):
+        array_of_tuples = [(system.system, system.priority, system.rownum) for system in systems_to_scout]
+        array_of_tuples_update = [(system.priority, system.rownum, system.system) for system in systems_to_scout]
+        await self.db().executemany(insert_post_system, array_of_tuples)
+        await self.db().executemany(update_post_system, array_of_tuples_update)
 
-    async def rollback(self):
-        await self.db.execute("ROLLBACK")
+    async def write_system_to_scout(self, systems_to_scout: List[ScoutSystem]):
+        await self.purge_scout_systems()
+        array_of_tuples = [(system.system, system.priority, system.rownum) for system in systems_to_scout]
+        await self.db().executemany(insert_scout_system, array_of_tuples)

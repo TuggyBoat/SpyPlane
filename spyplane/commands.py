@@ -1,9 +1,8 @@
-import aiosqlite
 from discord import Interaction, app_commands
 
 from spyplane._metadata import __version__
-from spyplane.constants import DB_PATH
 from spyplane.database.config_repository import ConfigRepository
+from spyplane.database.systems_repository import SystemsRepository
 from spyplane.services.config_service import ConfigService
 from spyplane.services.sync_service import SyncService
 from spyplane.services.systems_posting_service import SystemsPostingService
@@ -36,7 +35,7 @@ async def post_systems(interaction: Interaction):
     """Post systems to scout"""
     await interaction.response.defer(ephemeral=True)
     print(f'User {interaction.user.name} is posting the systems to scout: {__version__}.')
-    await SystemsPostingService(interaction.channel).publish_systems_to_scout()
+    await SystemsPostingService().publish_systems_to_scout()
     await interaction.followup.send(f"Spy plane is now on the prowl!")
 
 
@@ -45,7 +44,10 @@ async def sync_systems(interaction: Interaction):
     """Sync systems sheet and db"""
     print(f'User {interaction.user.name} is syncing the DB with sheet on systems to scout: {__version__}.')
     await interaction.response.defer()
+    repo = SystemsRepository()
+    await repo.begin()
     await SyncService().sync_db_sheet()
+    await repo.commit()
     await interaction.followup.send(f"Spy plane is fueled and ready to go")
 
 
@@ -66,9 +68,10 @@ async def config(interaction: Interaction, name: str = 'interval_hours', value: 
     """Configures the bot behavior"""
     print(f'User {interaction.user.name} is setting config {name} to {value}: {__version__}.')
     repo = ConfigRepository()
-    async with aiosqlite.connect(DB_PATH) as db:
-        await repo.init(db)
-        await repo.update(name, value)
+    await repo.begin()
+    await repo.update_config(name, value)
+    # TODO if carryover = false - purge the posted table
+    await repo.commit()
     await interaction.response.send_message(f"Config {name} was set to {value}")
 
 
