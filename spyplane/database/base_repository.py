@@ -1,3 +1,5 @@
+from sqlite3 import OperationalError
+
 from aiosqlite import Connection
 
 from spyplane.spy_plane import bot
@@ -10,7 +12,12 @@ class BaseRepository:
 
     @staticmethod
     async def begin():
-        await bot.db.execute("BEGIN")
+        try:
+            await bot.db.execute("BEGIN")
+        except OperationalError as e:
+            if str(e)=="cannot start a transaction within a transaction":
+                await bot.db.execute("END TRANSACTION")
+                await bot.db.execute("BEGIN")
 
     @staticmethod
     async def rollback():
