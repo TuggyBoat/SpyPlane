@@ -12,7 +12,7 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         await bot.dbinit()
         self.subject = SystemsRepository()
         self.test_scouts = [
-            ScoutSystem('', '1', 2),
+            ScoutSystem('', '1', 2), ScoutSystem('Velas', '1', 2),
             ScoutSystem('Velas', '1', 2), ScoutSystem('Volowahku', '1', 3),
             ScoutSystem('Vela1s', '1', 2), ScoutSystem('Wader', 'blah', 3)
         ]
@@ -32,6 +32,7 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertTrue("Volowahku" in actual_systems_to_scout)
         self.assertTrue("Vela1s" not in actual_systems_to_scout)
         self.assertTrue("Wader" not in actual_systems_to_scout)
+        self.assertEqual(1, len([x for x in actual_systems_to_scout if x=="Velas"]))
 
     async def test_get_invalid_systems(self):
         await self.subject.write_system_to_scout(self.test_scouts)
