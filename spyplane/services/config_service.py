@@ -21,13 +21,24 @@ class ConfigService:
             embed.add_field(name=config.name, value=config.value, inline=False)
         return embed
 
-    async def update_config(self, name, value):
-        message_addon = ""
-        await self.repo.update_config(name, value)
-        if name=="carryover" and value not in ["true", "True", "yes", "Yes"]:
+    async def update_config(self, name: str, value: str):
+        # TODO refactor when we have more configuration
+        supported_configs = ["carryover", "interval_hours"]
+        if name not in supported_configs:
+            return f"Config was not set. We support only {supported_configs}"
+        value_lower = value.lower()
+        supported_carryover = ["true", "false"]
+        if name=="carryover" and value_lower not in supported_carryover:
+            return f"Config was not set. carryover supports only {supported_carryover}"
+        if name=="interval_hours" and (not value_lower.isdigit() or int(value_lower) < 1 or int(value_lower) > 24):
+            return f"Config was not set. interval_hours supports only numbers between 1 and 24"
+
+        await self.repo.update_config(name, value_lower)
+        message = f"Config {name} was set to {value_lower}"
+        if name=="carryover" and value=="false":
             await self.system_repo.purge_posted_systems()
-            message_addon = " Also removed current carryover systems, if any"
-        return message_addon
+            message = f"Config {name} was set to {value}. Also removed current carryover systems, if any"
+        return message
 
     @staticmethod
     def common_embed_setup(description, title):

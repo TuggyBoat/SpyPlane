@@ -56,14 +56,15 @@ async def dump_config(interaction: Interaction):
 
 @bot.tree.command(name='spy_plane_config', description="configures the bot behavior")
 @app_commands.describe(
-    name='Name of the config: `interval_hours` is the default',
-    value='Value for the config `4` is the default for `interval_hours`',
+    name='Name of the config: Can be `interval_hours` or `carryover` ',
+    value='Value: For `interval_hours` should be a number 1 to 24. For `carryover` it should be `true` or `false`',
 )
-async def config(interaction: Interaction, name: str = 'interval_hours', value: str = '4'):
+async def config(interaction: Interaction, name: str, value: str):
     """Configures the bot behavior"""
-    print(f'User {interaction.user.name} is setting config {name} to {value}: {__version__}.')
-    message_addon = await ConfigService().update_config(name, value)
-    await interaction.response.send_message(f"Config {name} was set to {value}{message_addon}")
+    print(f'User {interaction.user.name} is attempting to set config {name} to {value}: {__version__}.')
+    message = await ConfigService().update_config(name, value)
+    print(message)
+    await interaction.response.send_message(message)
 
 
 @bot.tree.command(name='spy_plane_emoji', description="Utility to test the emoji availability in a server")
