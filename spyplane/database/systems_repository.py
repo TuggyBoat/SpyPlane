@@ -88,6 +88,16 @@ class SystemsRepository(BaseRepository):
         await self.db().executemany(update_post_system, array_of_tuples_update)
 
     async def write_system_to_scout(self, systems_to_scout: List[ScoutSystem]):
+        systems_to_write = self.remove_duplicates(systems_to_scout)
         await self.purge_scout_systems()
-        array_of_tuples = [(system.system, system.priority, system.rownum) for system in systems_to_scout]
+        array_of_tuples = [(system.system, system.priority, system.rownum) for system in systems_to_write]
         await self.db().executemany(insert_scout_system, array_of_tuples)
+
+    @staticmethod
+    def remove_duplicates(systems_to_scout):
+        sys_names, systems_to_write = [], []
+        for sys in systems_to_scout:
+            if sys.system not in sys_names:
+                systems_to_write.append(sys)
+                sys_names.append(sys.system)
+        return systems_to_write

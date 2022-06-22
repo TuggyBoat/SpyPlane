@@ -12,6 +12,7 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         await bot.dbinit()
         self.subject = SystemsRepository()
         self.test_scouts = [
+            ScoutSystem('', '1', 2),
             ScoutSystem('Velas', '1', 2), ScoutSystem('Volowahku', '1', 3),
             ScoutSystem('Vela1s', '1', 2), ScoutSystem('Wader', 'blah', 3)
         ]
@@ -42,6 +43,7 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertTrue("Volowahku" not in systems_to_flag)
         self.assertTrue("Vela1s" in systems_to_flag)
         self.assertTrue("Wader" in systems_to_flag)
+        self.assertTrue("" in systems_to_flag)
 
     async def test_get_system(self):
         await self.subject.write_system_to_scout(self.test_scouts)

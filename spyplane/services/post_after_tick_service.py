@@ -23,7 +23,9 @@ class PostAfterTickService:
         print(f"Waiting for {seconds} seconds")
         await asyncio.sleep(seconds)
         print(f"Synchronizing with google sheets")
+        await self.repo.begin()
         await self.sync.sync_db_sheet()
+        await self.repo.commit()
         print(f"Posting systems now")
         await SystemsPostingService(channel).publish_systems_to_scout()
 
