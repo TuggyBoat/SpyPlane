@@ -5,11 +5,13 @@ import discord
 from discord import Color, Embed
 
 from spyplane.database.config_repository import ConfigRepository
+from spyplane.database.systems_repository import SystemsRepository
 
 
 class ConfigService:
-    def __init__(self, repo=ConfigRepository()):
+    def __init__(self, repo=ConfigRepository(), system_repo=SystemsRepository()):
         self.repo = repo
+        self.system_repo = system_repo
 
 
     async def dump_config_embed(self) -> Embed:
@@ -18,6 +20,14 @@ class ConfigService:
         for config in config_dump:
             embed.add_field(name=config.name, value=config.value, inline=False)
         return embed
+
+    async def update_config(self, name, value):
+        message_addon = ""
+        await self.repo.update_config(name, value)
+        if name=="carryover" and value not in ["true", "True", "yes", "Yes"]:
+            await self.system_repo.purge_posted_systems()
+            message_addon = " Also removed current carryover systems, if any"
+        return message_addon
 
     @staticmethod
     def common_embed_setup(description, title):

@@ -21,10 +21,10 @@ class ScoutRecordingService:
                 await self.systems_repo.begin()
                 await self.history_repo.record_scout(system, username, userid)
                 await self.systems_repo.remove_scouted(system.system)
+                await self.systems_repo.commit()
                 await message.delete()
                 print(f"Message deleted: {message.content}")
                 await SyncService().mark_row_scout(system, username, userid)
-                await self.systems_repo.commit()
         except Exception as e:
             print("OnReaction: Error when recording the scout")
             print(e)

@@ -16,10 +16,9 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
             ScoutSystem('Velas', '1', 2), ScoutSystem('Volowahku', '1', 3),
             ScoutSystem('Vela1s', '1', 2), ScoutSystem('Wader', 'blah', 3)
         ]
-        await self.subject.begin()
+        await self.subject.purge_scout_systems()
 
     async def asyncTearDown(self):
-        await self.subject.rollback()
         await bot.dbclose()
 
     async def test_get_valid_systems(self):
@@ -52,7 +51,6 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertEqual("Velas", system.system)
 
     async def test_purge(self):
-        await self.subject.purge_scout_systems()
         valid = await self.subject.get_valid_systems()
         invalid = await self.subject.get_valid_systems()
         self.assertEqual(0, len(valid))

@@ -1,8 +1,6 @@
 from discord import Interaction, app_commands
 
 from spyplane._metadata import __version__
-from spyplane.database.config_repository import ConfigRepository
-from spyplane.database.systems_repository import SystemsRepository
 from spyplane.services.config_service import ConfigService
 from spyplane.services.sync_service import SyncService
 from spyplane.services.systems_posting_service import SystemsPostingService
@@ -44,10 +42,7 @@ async def sync_systems(interaction: Interaction):
     """Sync systems sheet and db"""
     print(f'User {interaction.user.name} is syncing the DB with sheet on systems to scout: {__version__}.')
     await interaction.response.defer()
-    repo = SystemsRepository()
-    await repo.begin()
     await SyncService().sync_db_sheet()
-    await repo.commit()
     await interaction.followup.send(f"Spy plane is fueled and ready to go")
 
 
@@ -67,12 +62,8 @@ async def dump_config(interaction: Interaction):
 async def config(interaction: Interaction, name: str = 'interval_hours', value: str = '4'):
     """Configures the bot behavior"""
     print(f'User {interaction.user.name} is setting config {name} to {value}: {__version__}.')
-    repo = ConfigRepository()
-    await repo.begin()
-    await repo.update_config(name, value)
-    # TODO if carryover = false - purge the posted table
-    await repo.commit()
-    await interaction.response.send_message(f"Config {name} was set to {value}")
+    message_addon = await ConfigService().update_config(name, value)
+    await interaction.response.send_message(f"Config {name} was set to {value}{message_addon}")
 
 
 @bot.tree.command(name='spy_plane_emoji', description="Utility to test the emoji availability in a server")
@@ -83,5 +74,5 @@ async def emoji_test_utility(interaction: Interaction, id: str):
     """Post systems to scout"""
     emoji = bot.get_emoji(int(id))
     message = await interaction.channel.send(f'Emoji for ID: {emoji}')
-    await message.add_reaction('✅' if emoji is None else emoji)
+    await message.add_reaction(bot.emoji_bullseye)
     await interaction.response.send_message(f"Emoji support: {' '.join([f'{e.name}-{e.id}' for e in bot.emojis])}")

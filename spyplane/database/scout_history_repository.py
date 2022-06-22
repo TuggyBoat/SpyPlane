@@ -14,6 +14,10 @@ read_scout_history = '''
 select id, system_name, username, userid, timestamp from scout_history where 1=1
 '''
 
+purge_scout_history = '''
+delete from scout_history
+'''
+
 
 class ScoutHistoryRepository(BaseRepository):
 
@@ -36,3 +40,6 @@ class ScoutHistoryRepository(BaseRepository):
         async with self.db().execute(query, parameters=params) as cur:
             rows = await cur.fetchall()
             return [ScoutHistory(r[0], r[1], r[2], r[3], datetime.utcfromtimestamp(r[4])) for r in rows]
+
+    async def purge_scout_systems_history(self) -> None:
+        await self.db().execute(purge_scout_history)

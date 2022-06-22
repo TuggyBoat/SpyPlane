@@ -13,10 +13,9 @@ class ScoutHistoryRepositoryTests(IsolatedAsyncioTestCase):
     async def asyncSetUp(self) -> None:
         await bot.dbinit()
         self.subject = ScoutHistoryRepository()
-        await self.subject.begin()
+        await self.subject.purge_scout_systems_history()
 
     async def asyncTearDown(self):
-        await self.subject.rollback()
         await bot.dbclose()
 
     async def test_record_scout(self):
