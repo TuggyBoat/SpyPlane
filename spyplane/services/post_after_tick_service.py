@@ -19,7 +19,7 @@ class PostAfterTickService:
         try:
             hours = await ConfigRepository().get_config("interval_hours")
             await bot.channel.send(f"Tick detected. Spy Plane will take off in ~ {hours.value} hours")
-            seconds = int(hours.value) * 60 * 60
+            seconds = int(hours.value) * 3600
             log(f"Waiting for {seconds} seconds")
             await asyncio.sleep(seconds)
             log(f"Synchronizing with google sheets")
