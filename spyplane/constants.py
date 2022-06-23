@@ -1,5 +1,6 @@
 import ast
 import os
+import sys
 
 from dotenv import load_dotenv, find_dotenv
 
@@ -22,3 +23,7 @@ CONTROL_CHANNEL = int(os.getenv('PROD_SPY_PLANE_CHANNEL_ID')) if flag_production
 TICK_CHANNEL = int(os.getenv('PROD_TICK_DETECTION_CHANNEL_ID')) if flag_production else \
     int(os.getenv('TEST_TICK_DETECTION_CHANNEL_ID'))
 DB_PATH = './test_workspace/spyplane.db' if 'tests' in os.getcwd() else './workspace/spyplane.db'
+
+def log(msg):
+    print(msg)
+    sys.stdout.flush()

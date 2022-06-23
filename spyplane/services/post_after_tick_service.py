@@ -2,6 +2,7 @@ import asyncio
 
 import discord
 
+from spyplane.constants import log
 from spyplane.database.config_repository import ConfigRepository
 from spyplane.services.sync_service import SyncService
 from spyplane.services.systems_posting_service import SystemsPostingService
@@ -15,19 +16,23 @@ class PostAfterTickService:
         self.sync = sync
 
     async def run_after_interval(self):
-        hours = await ConfigRepository().get_config("interval_hours")
-        await bot.channel.send(f"Tick detected. Spy Plane will take off in ~ {hours.value} hours")
-        seconds = int(hours.value) * 60
-        print(f"Waiting for {seconds} seconds")
-        await asyncio.sleep(seconds)
-        print(f"Synchronizing with google sheets")
-        await self.sync.sync_db_sheet()
-        print(f"Posting systems now")
-        await SystemsPostingService().publish_systems_to_scout()
+        try:
+            hours = await ConfigRepository().get_config("interval_hours")
+            await bot.channel.send(f"Tick detected. Spy Plane will take off in ~ {hours.value} hours")
+            seconds = int(hours.value) * 60 * 60
+            log(f"Waiting for {seconds} seconds")
+            await asyncio.sleep(seconds)
+            log(f"Synchronizing with google sheets")
+            await self.sync.sync_db_sheet()
+            log(f"Posting systems now")
+            await SystemsPostingService().publish_systems_to_scout()
+        except Exception as e:
+            log("exception")
+            log(str(e))
 
     async def validate_message(self, message: discord.message.Message):
         # if 'Tick Detected' not in message and 'Latest Tick At' not in message:
         #     print("'Tick Detected' and 'Latest Tick At' is not in message")
         #     return
-        print('Tick detection message found!')
+        log('Tick detection message found!')
         asyncio.create_task(self.run_after_interval())
