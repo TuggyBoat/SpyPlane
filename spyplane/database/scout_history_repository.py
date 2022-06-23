@@ -21,9 +21,9 @@ delete from scout_history
 
 class ScoutHistoryRepository(BaseRepository):
 
-    async def record_scout(self, system: ScoutSystem, username, userid):
-        await self.db().execute(insert_scout_history, (system.system, username, userid, time.mktime(datetime.now().timetuple())))
-        print(f"Added history: {system.system}, {username}, {userid}, {datetime.now()}")
+    async def record_scout(self, system: ScoutSystem, username, userid, ts=datetime.now()):
+        await self.db().execute(insert_scout_history, (system.system, username, userid, time.mktime(ts.timetuple())))
+        print(f"Added history: {system.system}, {username}, {userid}, {ts}")
 
     async def get_history(self, system: Optional[str] = None, username: Optional[str] = None, userid: Optional[int] = None):
         params = []

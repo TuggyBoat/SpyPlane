@@ -1,4 +1,4 @@
-import datetime
+from datetime import datetime, timezone
 from typing import List
 from unittest import IsolatedAsyncioTestCase
 
@@ -19,7 +19,7 @@ class ScoutHistoryRepositoryTests(IsolatedAsyncioTestCase):
         await bot.dbclose()
 
     async def test_record_scout(self):
-        await self.subject.record_scout(ScoutSystem('Volowahku', '1', 3), "zaszrespawned", 354990093980663889)
+        await self.subject.record_scout(ScoutSystem('Volowahku', '1', 3), "zaszrespawned", 354990093980663889, datetime.now())
         history: List[ScoutHistory] = await self.subject.get_history(username="zaszrespawned")
         for scout in history:
             print(scout)
@@ -27,4 +27,4 @@ class ScoutHistoryRepositoryTests(IsolatedAsyncioTestCase):
         self.assertEqual("Volowahku", history[0].system_name)
         self.assertEqual("zaszrespawned", history[0].username)
         self.assertEqual(354990093980663889, history[0].userid)
-        self.assertEqual(datetime.datetime.now(datetime.timezone.utc).date(), history[0].timestamp.date())
+        self.assertEqual(datetime.now(timezone.utc).date(), history[0].timestamp.date())

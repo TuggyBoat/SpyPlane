@@ -1,5 +1,5 @@
 from discord import Message
-
+from datetime import datetime
 from spyplane.database.scout_history_repository import ScoutHistoryRepository
 from spyplane.database.systems_repository import SystemsRepository
 from spyplane.services.sync_service import SyncService
@@ -19,12 +19,13 @@ class ScoutRecordingService:
             system = await self.systems_repo.get_system(message.content)
             async with bot.lock:
                 await self.systems_repo.begin()
-                await self.history_repo.record_scout(system, username, userid)
+                ts = datetime.now()
+                await self.history_repo.record_scout(system, username, userid, ts)
                 await self.systems_repo.remove_scouted(system.system)
                 await self.systems_repo.commit()
                 await message.delete()
                 print(f"Message deleted: {message.content}")
-                await SyncService().mark_row_scout(system, username, userid)
+                await SyncService().mark_row_scout(system, username, userid, ts)
         except Exception as e:
             print("OnReaction: Error when recording the scout")
             print(e)
