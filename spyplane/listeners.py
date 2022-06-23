@@ -1,6 +1,6 @@
 import asyncio
 
-from discord import RawReactionActionEvent
+from discord import RawReactionActionEvent, Message
 
 from spyplane._metadata import __version__
 from spyplane.constants import CONTROL_CHANNEL, TICK_CHANNEL, BGS_BOT_USER_ID, EMOJI_BULLSEYE, log
@@ -56,9 +56,9 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
     if str(payload.emoji)!=str(bot.emoji_bullseye):
         print(f"Not the target emoji {payload.emoji} {bot.emoji_bullseye} {payload.emoji.name} {bot.emoji_bullseye.name}")
         return
-    message = await bot.channel.fetch_message(payload.message_id)
-    message.delete()
-    asyncio.create_task(record.record_reaction(message, payload.member.name, payload.member.id))  # Another option is to try a Queue
+    message: Message = await bot.channel.fetch_message(payload.message_id)
+    asyncio.create_task(record.record_reaction(message.content, payload.member.name, payload.member.id))  # Another option is to try a Queue
+    await message.delete()
 
 
 @bot.event
