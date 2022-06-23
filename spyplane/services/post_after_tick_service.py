@@ -22,12 +22,12 @@ class PostAfterTickService:
             seconds = int(hours.value) * 3600
             log(f"Waiting for {seconds} seconds")
             await asyncio.sleep(seconds)
-            log(f"Synchronizing with google sheets")
+            log("Synchronizing with google sheets")
             await self.sync.sync_db_sheet()
-            log(f"Posting systems now")
+            log("Posting systems now")
             await SystemsPostingService().publish_systems_to_scout()
         except Exception as e:
-            log("exception")
+            log("Exception when running after interval")
             log(str(e))
 
     async def validate_message(self, message: discord.message.Message):
