@@ -23,21 +23,22 @@ class ConfigService:
 
     async def update_config(self, name: str, value: str):
         # TODO refactor when we have more configuration
-        supported_configs = ["carryover", "interval_hours"]
-        if name not in supported_configs:
-            return f"Config was not set. We support only {supported_configs}"
+        name_lower = name.lower()
         value_lower = value.lower()
+        supported_configs = ["carryover", "interval_hours"]
+        if name_lower not in supported_configs:
+            return f"Config was not set. We support only {supported_configs}"
         supported_carryover = ["true", "false"]
-        if name=="carryover" and value_lower not in supported_carryover:
+        if name_lower=="carryover" and value_lower not in supported_carryover:
             return f"Config was not set. carryover supports only {supported_carryover}"
-        if name=="interval_hours" and (not value_lower.isdigit() or int(value_lower) < 1 or int(value_lower) > 24):
+        if name_lower=="interval_hours" and (not value_lower.isdigit() or int(value_lower) < 1 or int(value_lower) > 24):
             return f"Config was not set. interval_hours supports only numbers between 1 and 24"
 
-        await self.repo.update_config(name, value_lower)
-        message = f"Config {name} was set to {value_lower}"
-        if name=="carryover" and value=="false":
+        await self.repo.update_config(name_lower, value_lower)
+        message = f"Config {name_lower} was set to {value_lower}"
+        if name_lower=="carryover" and value_lower=="false":
             await self.system_repo.purge_posted_systems()
-            message = f"Config {name} was set to {value}. Also removed current carryover systems, if any"
+            message = f"Config {name_lower} was set to {value_lower}. Also removed current carryover systems, if any"
         return message
 
     @staticmethod
