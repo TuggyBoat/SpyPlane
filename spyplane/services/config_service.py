@@ -32,7 +32,7 @@ class ConfigService:
         if name_lower=="carryover" and value_lower not in supported_carryover:
             return f"Config was not set. carryover supports only {supported_carryover}"
         if name_lower=="interval_hours" and (not value_lower.isdigit() or int(value_lower) < 1 or int(value_lower) > 24):
-            return f"Config was not set. interval_hours supports only numbers between 1 and 24"
+            return "Config was not set. interval_hours supports only numbers between 1 and 24"
 
         await self.repo.update_config(name_lower, value_lower)
         message = f"Config {name_lower} was set to {value_lower}"
