@@ -1,3 +1,4 @@
+import sys
 from asyncio import Lock
 from threading import Thread
 from typing import Optional, Union
@@ -30,6 +31,7 @@ class SpyPlane(Client):
         self.db = await aiosqlite.connect(DB_PATH)
         await self.db.set_trace_callback(print)
         print('db open')
+        sys.stdout.flush()
 
     async def close(self):
         await self.dbclose()
@@ -38,6 +40,7 @@ class SpyPlane(Client):
     async def dbclose(self):
         print('closing DB connection')
         await self.db.close()
+        sys.stdout.flush()
 
 
 bot = SpyPlane(intents=Intents.default())

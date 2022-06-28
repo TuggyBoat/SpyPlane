@@ -1,6 +1,6 @@
 import unicodedata
 from typing import List
-
+from datetime import datetime
 import gspread
 
 from spyplane.constants import GDRIVE_TOKEN
@@ -39,8 +39,8 @@ class SpreadsheetHelper:
         } for i in invalid]
         self.wks.batch_format(formats)
 
-    def mark_row_scout(self, rownum, user_name, user_id):
-        self.wks.update(f"C{rownum + 1}", [[user_name, str(user_id)]])
+    def mark_row_scout(self, rownum, user_name, user_id, ts: datetime):
+        self.wks.update(f"C{rownum + 1}", [[user_name, str(user_id), "{:%b %d %H:%M:%S}".format(ts)]])
 
     def read_whole_sheet(self) -> List[ScoutSystem]:
         list_of_lists = self.wks.get_all_values()

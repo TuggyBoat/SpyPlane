@@ -35,14 +35,13 @@ class SystemsPostingService:
         if len(splits[priority_string]):
             if priority_string!='Primary':
                 await bot.channel.send(f"__**{priority_string} List**__")
-                await self.repo.begin()
                 await self.repo.write_system_to_post(splits[priority_string])
-                await self.repo.commit()
+        else:
+            print(f'Empty {priority_string} List')
         for scout_system in splits[priority_string]:
             message = await bot.channel.send(scout_system.system)
             await message.add_reaction(bot.emoji_bullseye)
-        else:
-            print(f'Empty {priority_string} List')
+
 
     @staticmethod
     def is_not_pinned_message(message: discord.message.Message) -> bool:

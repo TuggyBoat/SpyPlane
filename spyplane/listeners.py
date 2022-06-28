@@ -1,9 +1,9 @@
 import asyncio
 
-from discord import RawReactionActionEvent
+from discord import RawReactionActionEvent, Message
 
 from spyplane._metadata import __version__
-from spyplane.constants import CONTROL_CHANNEL, TICK_CHANNEL, BGS_BOT_USER_ID, EMOJI_BULLSEYE
+from spyplane.constants import CONTROL_CHANNEL, TICK_CHANNEL, BGS_BOT_USER_ID, EMOJI_BULLSEYE, log
 from spyplane.services.post_after_tick_service import PostAfterTickService
 from spyplane.services.scout_recording_service import ScoutRecordingService
 from spyplane.spy_plane import bot
@@ -56,15 +56,20 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
     if str(payload.emoji)!=str(bot.emoji_bullseye):
         print(f"Not the target emoji {payload.emoji} {bot.emoji_bullseye} {payload.emoji.name} {bot.emoji_bullseye.name}")
         return
-    message = await bot.channel.fetch_message(payload.message_id)
-    message.delete()
-    asyncio.create_task(record.record_reaction(message, payload.member.name, payload.member.id)) # Another option is to try a Queue
+    message: Message = await bot.channel.fetch_message(payload.message_id)
+    asyncio.create_task(record.record_reaction(message.content, payload.member.name, payload.member.id))  # Another option is to try a Queue
+    await message.delete()
+
 
 @bot.event
 async def on_message(msg):
-    if msg.author.id==bot.user.id:
-        # print("Message from bot to itself")
-        pass
-    elif msg.author.id==BGS_BOT_USER_ID and msg.channel.id==TICK_CHANNEL:
-        print("Message from BGS Bot in tick channel!")
-        await PostAfterTickService().validate_message(msg)
+    try:
+        if msg.author.id==bot.user.id:
+            # print("Message from bot to itself")
+            pass
+        elif msg.author.id==BGS_BOT_USER_ID and msg.channel.id==TICK_CHANNEL:
+            log("Message from BGS Bot in tick channel!")
+            await PostAfterTickService().validate_message(msg)
+    except Exception as e:
+        log("Exception on message")
+        log(str(e))

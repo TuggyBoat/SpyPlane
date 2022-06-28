@@ -1,5 +1,5 @@
 from typing import List
-
+from datetime import datetime
 from spyplane.database.systems_repository import SystemsRepository
 from spyplane.models.scout_system import ScoutSystem
 from spyplane.sheets.spreadsheet_helper import SpreadsheetHelper
@@ -23,6 +23,6 @@ class SyncService:
             [system.rownum for system in invalid_scouts_actual]
         )
 
-    async def mark_row_scout(self, system: ScoutSystem, user_name, user_id):
+    async def mark_row_scout(self, system: ScoutSystem, user_name, user_id, ts: datetime):
         print(f"Sheet Update: {user_name}:{user_id} scouted {system.system}.")
-        await bot.loop.run_in_executor(None, self.sheets.mark_row_scout, system.rownum, user_name, user_id)
+        await bot.loop.run_in_executor(None, self.sheets.mark_row_scout, system.rownum, user_name, user_id, ts)

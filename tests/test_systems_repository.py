@@ -12,13 +12,13 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         await bot.dbinit()
         self.subject = SystemsRepository()
         self.test_scouts = [
+            ScoutSystem('', '1', 2), ScoutSystem('Velas', '1', 2),
             ScoutSystem('Velas', '1', 2), ScoutSystem('Volowahku', '1', 3),
             ScoutSystem('Vela1s', '1', 2), ScoutSystem('Wader', 'blah', 3)
         ]
-        await self.subject.begin()
+        await self.subject.purge_scout_systems()
 
     async def asyncTearDown(self):
-        await self.subject.rollback()
         await bot.dbclose()
 
     async def test_get_valid_systems(self):
@@ -31,6 +31,7 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertTrue("Volowahku" in actual_systems_to_scout)
         self.assertTrue("Vela1s" not in actual_systems_to_scout)
         self.assertTrue("Wader" not in actual_systems_to_scout)
+        self.assertEqual(1, len([x for x in actual_systems_to_scout if x=="Velas"]))
 
     async def test_get_invalid_systems(self):
         await self.subject.write_system_to_scout(self.test_scouts)
@@ -42,6 +43,7 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertTrue("Volowahku" not in systems_to_flag)
         self.assertTrue("Vela1s" in systems_to_flag)
         self.assertTrue("Wader" in systems_to_flag)
+        self.assertTrue("" in systems_to_flag)
 
     async def test_get_system(self):
         await self.subject.write_system_to_scout(self.test_scouts)
@@ -49,7 +51,6 @@ class SystemsRepositoryTests(IsolatedAsyncioTestCase):
         self.assertEqual("Velas", system.system)
 
     async def test_purge(self):
-        await self.subject.purge_scout_systems()
         valid = await self.subject.get_valid_systems()
         invalid = await self.subject.get_valid_systems()
         self.assertEqual(0, len(valid))

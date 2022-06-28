@@ -2,6 +2,10 @@
 
 Scouting bot
 
+# Functional Notes
+
+[Link to Notes](https://docs.google.com/document/d/1a4U9vYSLk9_sQVjA3xz49KnCS0hibOq2ELEXc87X9yI/edit?usp=sharing)
+
 # Tech Notes
 
 ## Local devbox setup

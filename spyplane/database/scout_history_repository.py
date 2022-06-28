@@ -14,12 +14,16 @@ read_scout_history = '''
 select id, system_name, username, userid, timestamp from scout_history where 1=1
 '''
 
+purge_scout_history = '''
+delete from scout_history
+'''
+
 
 class ScoutHistoryRepository(BaseRepository):
 
-    async def record_scout(self, system: ScoutSystem, username, userid):
-        await self.db().execute(insert_scout_history, (system.system, username, userid, time.mktime(datetime.now().timetuple())))
-        print(f"Added history: {system.system}, {username}, {userid}, {datetime.now()}")
+    async def record_scout(self, system: ScoutSystem, username, userid, ts=datetime.now()):
+        await self.db().execute(insert_scout_history, (system.system, username, userid, time.mktime(ts.timetuple())))
+        print(f"Added history: {system.system}, {username}, {userid}, {ts}")
 
     async def get_history(self, system: Optional[str] = None, username: Optional[str] = None, userid: Optional[int] = None):
         params = []
@@ -36,3 +40,6 @@ class ScoutHistoryRepository(BaseRepository):
         async with self.db().execute(query, parameters=params) as cur:
             rows = await cur.fetchall()
             return [ScoutHistory(r[0], r[1], r[2], r[3], datetime.utcfromtimestamp(r[4])) for r in rows]
+
+    async def purge_scout_systems_history(self) -> None:
+        await self.db().execute(purge_scout_history)

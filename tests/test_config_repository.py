@@ -20,6 +20,12 @@ class ConfigRepositoryTests(IsolatedAsyncioTestCase):
     async def test_record_scout(self):
         await self.subject.update_config("interval_hours", "6")
         c: Config = await self.subject.get_config("interval_hours")
+        await self.assertConfig(c)
+        await self.subject.update_config("interval_hours", "4")
+        c: Config = await self.subject.get_config("interval_hours")
+        await self.assertConfig(c, "4")
+
+    async def assertConfig(self, c, expected="6"):
         self.assertEqual("interval_hours", c.name)
-        self.assertEqual("6", c.value)
+        self.assertEqual(expected, c.value)
         self.assertEqual(datetime.datetime.now(datetime.timezone.utc).date(), c.timestamp.date())
