@@ -31,8 +31,7 @@ class PostAfterTickService:
             log(str(e))
 
     async def validate_message(self, message: discord.message.Message):
-        # if 'Tick Detected' not in message and 'Latest Tick At' not in message:
-        #     print("'Tick Detected' and 'Latest Tick At' is not in message")
-        #     return
+        message_to = 'Tick Detected' not in message or 'Latest Tick At' not in message
+        print(f"Condition: {message_to}", flush=True)
         log('Tick detection message found!')
         asyncio.create_task(self.run_after_interval())
