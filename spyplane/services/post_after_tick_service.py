@@ -18,7 +18,9 @@ class PostAfterTickService:
     async def run_after_interval(self):
         try:
             hours = await ConfigRepository().get_config("interval_hours")
-            await bot.channel.send(f"Tick detected. Spy Plane will take off in ~ {hours.value} hours")
+            message = f"Tick detected. Spy Plane will take off in ~ {hours.value} hours"
+            log(message)
+            await bot.channel.send(message)
             seconds = int(hours.value) * 3600
             log(f"Waiting for {seconds} seconds")
             await asyncio.sleep(seconds)
@@ -31,7 +33,8 @@ class PostAfterTickService:
             log(str(e))
 
     async def validate_message(self, message: discord.message.Message):
-        message_to = 'Tick Detected' not in message.content or 'Latest Tick At' not in message.content
-        print(f"Condition: {message_to}", flush=True)
+        if 'Tick Detected' not in message.content or 'Latest Tick At' not in message.content:
+            log("Not the tick message. Some other message from BGS bot")
+            return
         log('Tick detection message found!')
         asyncio.create_task(self.run_after_interval())

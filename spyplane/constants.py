@@ -12,8 +12,8 @@ GDRIVE_TOKEN = os.path.join(os.getcwd(), 'token.json') if "/tests" not in os.get
 BGS_BOT_USER_ID = int(os.getenv('BGS_BOT_USER_ID'))
 
 # Environment specific vars
-FACTION_SCOUT_ROLE_ID = 987800734819024977 if flag_production else 976913675355037716  # PTN test server @Faction-Scout or Waste of Time server @BGS
-EMOJI_BULLSEYE = 848957573792137247  # PTN test server :assassin:
+FACTION_SCOUT_ROLE_ID = 938722638405181470 if flag_production else 976913675355037716  # PTN MAIN or PTN TEST  @Faction-Scout: 987800734819024977
+EMOJI_BULLSEYE = 848957573792137247 if flag_production else 848957573792137247  # PTN MAIN :assasin: PTN test server :assassin:
 TOKEN = os.getenv('SPYPLANE_DISCORD_TOKEN_PROD') if flag_production else os.getenv('SPYPLANE_DISCORD_TOKEN_TESTING')
 APPLICATION_ID = os.getenv('APPLICATION_ID_PROD') if flag_production else os.getenv('APPLICATION_ID_TESTING')
 GUILD_ID = os.getenv('PROD_DISCORD_GUILD') if flag_production else os.getenv('TEST_DISCORD_GUILD')
