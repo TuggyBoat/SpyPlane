@@ -13,7 +13,7 @@ class PostAfterTickServiceTests(IsolatedAsyncioTestCase):
         pass
 
     async def test_tick_changed(self):
-        tick_check = await self.subject.tick_check()
+        tick_check = await self.subject.tick_check_and_schedule()
         print(self.subject.tick_service.current_tick)
         print(self.subject.tick_service.get_current_tick())
         self.assertFalse(tick_check)

@@ -43,4 +43,6 @@ class SpyPlane(Client):
         sys.stdout.flush()
 
 
-bot = SpyPlane(intents=Intents.default())
+intents = Intents.default()
+intents.message_content = True
+bot = SpyPlane(intents=intents)

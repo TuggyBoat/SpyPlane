@@ -19,7 +19,9 @@ class Listeners:
     def __init__(self):
         pass
 
+
 post_service = PostAfterTickService()
+
 
 @bot.event
 async def on_ready():
@@ -28,10 +30,12 @@ async def on_ready():
     bot.lock = asyncio.Lock()
     emoji = bot.get_emoji(EMOJI_BULLSEYE)
     bot.emoji_bullseye = emoji or '✅'
+
+    # Cron in not needed anymore, we are able to read embeds, and BGS Bot messages can trigger spy plane.
     # await bot.channel.send(f'{bot.user.name} has connected to Discord server. Version: {__version__}')
-    @aiocron.crontab('0/10 * * * *')
-    async def tick_cron_job():
-        await post_service.tick_check()
+    # @aiocron.crontab('0/10 * * * *')
+    # async def tick_cron_job():
+    #     await post_service.tick_check_and_schedule()
 
 
 @bot.event
@@ -64,7 +68,15 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
             return
         message: Message = await bot.channel.fetch_message(payload.message_id)
         asyncio.create_task(record.record_reaction(message.content, payload.member.name, payload.member.id))  # Another option is to try a Queue
-        if not message.pinned: # prevent deleting pinned messages with reactions in the channel
+        if not message.pinned:  # prevent deleting pinned messages with reactions in the channel
             await message.delete()
     except Exception as e:
         log_exception("on_raw_reaction_add", e)
+
+
+@bot.event
+async def on_message(msg):
+    try:
+        await PostAfterTickService().validate_and_schedule(msg)
+    except Exception as e:
+        log_exception("on_message", e)
