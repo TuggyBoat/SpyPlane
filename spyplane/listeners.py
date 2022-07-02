@@ -1,9 +1,10 @@
 import asyncio
 
+import aiocron as aiocron
 from discord import RawReactionActionEvent, Message
 
 from spyplane._metadata import __version__
-from spyplane.constants import CONTROL_CHANNEL, TICK_CHANNEL, BGS_BOT_USER_ID, EMOJI_BULLSEYE, log
+from spyplane.constants import CONTROL_CHANNEL, EMOJI_BULLSEYE, log, log_exception
 from spyplane.services.post_after_tick_service import PostAfterTickService
 from spyplane.services.scout_recording_service import ScoutRecordingService
 from spyplane.spy_plane import bot
@@ -18,6 +19,7 @@ class Listeners:
     def __init__(self):
         pass
 
+post_service = PostAfterTickService()
 
 @bot.event
 async def on_ready():
@@ -27,6 +29,9 @@ async def on_ready():
     emoji = bot.get_emoji(EMOJI_BULLSEYE)
     bot.emoji_bullseye = emoji or '✅'
     # await bot.channel.send(f'{bot.user.name} has connected to Discord server. Version: {__version__}')
+    @aiocron.crontab('0/10 * * * *')
+    async def tick_cron_job():
+        await post_service.tick_check()
 
 
 @bot.event
@@ -62,19 +67,12 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
         if not message.pinned: # prevent deleting pinned messages with reactions in the channel
             await message.delete()
     except Exception as e:
-        log("Exception on reaction add")
-        log(str(e))
+        log_exception("on_raw_reaction_add", e)
 
-
-@bot.event
-async def on_message(msg):
-    try:
-        if msg.author.id==bot.user.id:
-            # log("Message from bot to itself")
-            pass
-        elif msg.author.id==BGS_BOT_USER_ID and msg.channel.id==TICK_CHANNEL:
-            log("Message from BGS Bot in tick channel!")
-            await PostAfterTickService().validate_message(msg)
-    except Exception as e:
-        log("Exception on message")
-        log(str(e))
+#
+# @bot.event
+# async def on_message(msg):
+#     try:
+#         await post_service.validate_message(msg)
+#     except Exception as e:
+#         log_exception("on_message", e)

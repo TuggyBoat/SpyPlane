@@ -1,19 +1,19 @@
 import asyncio
 
-import discord
-
-from spyplane.constants import log
+from spyplane.constants import log, log_exception
 from spyplane.database.config_repository import ConfigRepository
 from spyplane.services.sync_service import SyncService
 from spyplane.services.systems_posting_service import SystemsPostingService
+from spyplane.services.tick_service import TickService
 from spyplane.spy_plane import bot
 
 
 class PostAfterTickService:
-    def __init__(self, sheets=SystemsPostingService(), sync=SyncService(), repo=ConfigRepository()):
+    def __init__(self, sheets=SystemsPostingService(), sync=SyncService(), repo=ConfigRepository(), ticks=TickService()):
         self.sheets = sheets
         self.repo = repo
         self.sync = sync
+        self.tick_service = ticks
 
     async def run_after_interval(self):
         try:
@@ -29,12 +29,9 @@ class PostAfterTickService:
             log("Posting systems now")
             await SystemsPostingService().publish_systems_to_scout()
         except Exception as e:
-            log("Exception when running after interval")
-            log(str(e))
+            log_exception("run_after_interval", e)
 
-    async def validate_message(self, message: discord.message.Message):
-        if 'Tick Detected' not in message.content or 'Latest Tick At' not in message.content:
-            log("Not the tick message. Some other message from BGS bot")
-            return
-        log('Tick detection message found!')
-        asyncio.create_task(self.run_after_interval())
+    async def tick_check(self):
+        has_ticked = await self.tick_service.has_ticked()
+        if has_ticked:
+            asyncio.create_task(self.run_after_interval())

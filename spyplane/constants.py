@@ -25,3 +25,7 @@ DB_PATH = './test_workspace/spyplane.db' if 'tests' in os.getcwd() else './works
 
 def log(msg):
     print(msg, flush=True)
+
+def log_exception(context: str, e: Exception):
+    log(f"Exception in {context}")
+    log(str(e)) # e can be logged only after conversion into a string
