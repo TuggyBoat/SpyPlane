@@ -68,11 +68,3 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
             await message.delete()
     except Exception as e:
         log_exception("on_raw_reaction_add", e)
-
-#
-# @bot.event
-# async def on_message(msg):
-#     try:
-#         await post_service.validate_message(msg)
-#     except Exception as e:
-#         log_exception("on_message", e)
