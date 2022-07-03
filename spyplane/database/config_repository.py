@@ -34,4 +34,6 @@ class ConfigRepository(BaseRepository):
         return [Config(row[0], row[1], row[2], datetime.utcfromtimestamp(row[3])) for row in rows]
 
     async def update_config(self, name: str, value: str):
+        await self.begin()
         await self.db().execute(update_config, (value, time.mktime(datetime.now().timetuple()), name))
+        await self.commit()

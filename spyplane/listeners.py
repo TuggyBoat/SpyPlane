@@ -1,6 +1,5 @@
 import asyncio
 
-import aiocron as aiocron
 from discord import RawReactionActionEvent, Message
 
 from spyplane._metadata import __version__
@@ -21,6 +20,7 @@ class Listeners:
 
 
 post_service = PostAfterTickService()
+record_service = ScoutRecordingService()
 
 
 @bot.event
@@ -51,9 +51,6 @@ async def on_error(event, *args, **kwargs):
     log(kwargs)
 
 
-record = ScoutRecordingService()
-
-
 @bot.event
 async def on_raw_reaction_add(payload: RawReactionActionEvent):
     try:
@@ -67,7 +64,7 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
             log(f"Not the target emoji {payload.emoji} {bot.emoji_bullseye} {payload.emoji.name} {bot.emoji_bullseye.name}")
             return
         message: Message = await bot.channel.fetch_message(payload.message_id)
-        asyncio.create_task(record.record_reaction(message.content, payload.member.name, payload.member.id))  # Another option is to try a Queue
+        asyncio.create_task(record_service.record_reaction(message.content, payload.member.name, payload.member.id))  # Another option is to try a Queue
         if not message.pinned:  # prevent deleting pinned messages with reactions in the channel
             await message.delete()
     except Exception as e:
@@ -77,6 +74,6 @@ async def on_raw_reaction_add(payload: RawReactionActionEvent):
 @bot.event
 async def on_message(msg):
     try:
-        await PostAfterTickService().validate_and_schedule(msg)
+        await post_service.validate_and_schedule(msg)
     except Exception as e:
         log_exception("on_message", e)

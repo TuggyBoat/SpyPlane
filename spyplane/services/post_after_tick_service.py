@@ -34,6 +34,10 @@ class PostAfterTickService:
             log_exception("run_after_interval", e)
 
     async def tick_check_and_schedule(self):
+        """
+        This is meant to be called in an aiocron. Uses :py:class:`~spyplane.services.TickService`
+        :return:
+        """
         has_ticked = await self.tick_service.has_ticked()
         if has_ticked:
             asyncio.create_task(self.run_after_interval())
