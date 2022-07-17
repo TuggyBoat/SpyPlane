@@ -1,6 +1,7 @@
 from discord import Interaction, app_commands
 
 from spyplane._metadata import __version__
+from spyplane.constants import log
 from spyplane.services.config_service import ConfigService
 from spyplane.services.sync_service import SyncService
 from spyplane.services.systems_posting_service import SystemsPostingService
@@ -76,4 +77,5 @@ async def emoji_test_utility(interaction: Interaction, id: str):
     emoji = bot.get_emoji(int(id))
     message = await interaction.channel.send(f'Emoji for ID: {emoji}')
     await message.add_reaction(bot.emoji_bullseye)
-    await interaction.response.send_message(f"Emoji support: {' '.join([f'{e.name}-{e.id}' for e in bot.emojis])}")
+    log(' '.join([f'{e.name}-{e.id}' for e in bot.emojis]))
+    await interaction.response.send_message(f"Emoji support test completed")
