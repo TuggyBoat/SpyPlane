@@ -22,3 +22,7 @@ class EliteBgsServiceTests(IsolatedAsyncioTestCase):
     async def test_get_system_faction_not_none_states_some_interesting(self, mocked_get):
         json = await self.subject.get_system_faction_not_none_states('Beatis')
         self.assertEqual(len(json), 2)
+        self.assertEqual(json[0]['Name'], 'Verner Imperial Society')
+        self.assertEqual(json[0]['Active'], 'expansion,election')
+        self.assertEqual(json[1]['Name'], 'Allied Beatis Nationalists')
+        self.assertEqual(json[1]['Active'], 'election')
