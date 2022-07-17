@@ -1,0 +1,240 @@
+{
+    "docs": [
+        {
+            "_id": "59e91be6d22c775be053375a",
+            "__v": 0,
+            "allegiance": "federation",
+            "conflicts": [],
+            "controlling_minor_faction": "rish blue travel company",
+            "controlling_minor_faction_cased": "Rish Blue Travel Company",
+            "controlling_minor_faction_id": "59e7cb28d22c775be0ff198a",
+            "eddb_id": 18781,
+            "factions": [
+                {
+                    "name": "Rish Blue Travel Company",
+                    "name_lower": "rish blue travel company",
+                    "faction_id": "59e7cb28d22c775be0ff198a",
+                    "faction_details": {
+                        "_id": "59e7cb28d22c775be0ff198a",
+                        "__v": 0,
+                        "allegiance": "federation",
+                        "eddb_id": 36341,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "election",
+                            "influence": 0.287159,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T02:20:39.000Z"
+                        },
+                        "government": "corporate",
+                        "name": "Rish Blue Travel Company",
+                        "name_lower": "rish blue travel company",
+                        "updated_at": "2022-07-17T18:14:18.000Z"
+                    }
+                },
+                {
+                    "name": "Labour of Wally Bei",
+                    "name_lower": "labour of wally bei",
+                    "faction_id": "59e91be6d22c775be0533758",
+                    "faction_details": {
+                        "_id": "59e91be6d22c775be0533758",
+                        "__v": 0,
+                        "allegiance": "federation",
+                        "eddb_id": 47581,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "none",
+                            "influence": 0.121335,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [
+                                {
+                                    "state": "infrastructurefailure",
+                                    "trend": 0
+                                }
+                            ],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T10:27:02.000Z"
+                        },
+                        "government": "democracy",
+                        "name": "Labour of Wally Bei",
+                        "name_lower": "labour of wally bei",
+                        "updated_at": "2022-07-17T10:27:02.000Z"
+                    }
+                },
+                {
+                    "name": "Wally Bei Technical",
+                    "name_lower": "wally bei technical",
+                    "faction_id": "59e91be6d22c775be0533767",
+                    "faction_details": {
+                        "_id": "59e91be6d22c775be0533767",
+                        "__v": 0,
+                        "allegiance": "federation",
+                        "eddb_id": 47582,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "none",
+                            "influence": 0.154702,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T10:27:02.000Z"
+                        },
+                        "government": "corporate",
+                        "name": "Wally Bei Technical",
+                        "name_lower": "wally bei technical",
+                        "updated_at": "2022-07-17T10:27:02.000Z"
+                    }
+                },
+                {
+                    "name": "Traditional Wally Bei Constitution Party",
+                    "name_lower": "traditional wally bei constitution party",
+                    "faction_id": "59e91be6d22c775be053376b",
+                    "faction_details": {
+                        "_id": "59e91be6d22c775be053376b",
+                        "__v": 0,
+                        "allegiance": "independent",
+                        "eddb_id": 47583,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "none",
+                            "influence": 0.143579,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T10:27:02.000Z"
+                        },
+                        "government": "dictatorship",
+                        "name": "Traditional Wally Bei Constitution Party",
+                        "name_lower": "traditional wally bei constitution party",
+                        "updated_at": "2022-07-17T10:27:02.000Z"
+                    }
+                },
+                {
+                    "name": "Dragons of Wally Bei",
+                    "name_lower": "dragons of wally bei",
+                    "faction_id": "59e91be6d22c775be053377f",
+                    "faction_details": {
+                        "_id": "59e91be6d22c775be053377f",
+                        "__v": 0,
+                        "allegiance": "independent",
+                        "eddb_id": 47584,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "none",
+                            "influence": 0.024267,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T10:27:02.000Z"
+                        },
+                        "government": "anarchy",
+                        "name": "Dragons of Wally Bei",
+                        "name_lower": "dragons of wally bei",
+                        "updated_at": "2022-07-17T10:27:02.000Z"
+                    }
+                },
+                {
+                    "name": "Partnership of Zemez",
+                    "name_lower": "partnership of zemez",
+                    "faction_id": "59e7d44cd22c775be0ff6a07",
+                    "faction_details": {
+                        "_id": "59e7d44cd22c775be0ff6a07",
+                        "__v": 0,
+                        "allegiance": "federation",
+                        "eddb_id": 52744,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "none",
+                            "influence": 0.125379,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T10:27:02.000Z"
+                        },
+                        "government": "confederacy",
+                        "name": "Partnership of Zemez",
+                        "name_lower": "partnership of zemez",
+                        "updated_at": "2022-07-17T10:27:02.000Z"
+                    }
+                },
+                {
+                    "name": "Wally Bei Exchange",
+                    "name_lower": "wally bei exchange",
+                    "faction_id": "59e91be6d22c775be053376a",
+                    "faction_details": {
+                        "_id": "59e91be6d22c775be053376a",
+                        "__v": 0,
+                        "allegiance": "federation",
+                        "eddb_id": 47585,
+                        "faction_presence": {
+                            "system_name": "Wally Bei",
+                            "system_name_lower": "wally bei",
+                            "system_id": "59e91be6d22c775be053375a",
+                            "state": "none",
+                            "influence": 0.143579,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T10:27:02.000Z"
+                        },
+                        "government": "corporate",
+                        "name": "Wally Bei Exchange",
+                        "name_lower": "wally bei exchange",
+                        "updated_at": "2022-07-17T10:27:02.000Z"
+                    }
+                }
+            ],
+            "government": "$government_corporate;",
+            "name": "Wally Bei",
+            "name_lower": "wally bei",
+            "population": 5254815280,
+            "primary_economy": "$economy_terraforming;",
+            "secondary_economy": "$economy_agri;",
+            "security": "$system_security_high;",
+            "state": "none",
+            "system_address": "5031654855394",
+            "updated_at": "2022-07-17T10:27:02.000Z",
+            "x": -14.875,
+            "y": 7.5,
+            "z": 65.78125,
+            "name_aliases": []
+        }
+    ],
+    "total": 1,
+    "limit": 10,
+    "page": 1,
+    "pages": 1,
+    "pagingCounter": 1,
+    "hasPrevPage": "False",
+    "hasNextPage": "False",
+    "prevPage": "None",
+    "nextPage": "None"
+}

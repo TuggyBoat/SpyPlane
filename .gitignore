@@ -5,6 +5,7 @@ token.json
 *.json
 *.jsonl
 !data/
+!tests/test_data/*
 *.txt
 !requirements.txt
 *.db
