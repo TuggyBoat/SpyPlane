@@ -1,10 +1,10 @@
+from typing import List
 import aiohttp
-import logging
-from typing import Optional
 
 import jq
 
 from spyplane.constants import log
+from spyplane.models.system_state import FactionState
 
 faction_active_state_query = '''
     .docs[].factions[]
@@ -20,7 +20,7 @@ class EliteBgsService:
     def __init__(self):
         self.compiled_faction_active_state_query = jq.compile(faction_active_state_query)
 
-    async def get_system_faction_not_none_states(self, system):
+    async def get_system_faction_not_none_states(self, system: str) -> List[FactionState]:
         params = {
             "name": system,
             "page": 1,
@@ -32,5 +32,5 @@ class EliteBgsService:
         # print(faction_history_json_parsed, flush=True)
         compile_input = self.compiled_faction_active_state_query.input(faction_history_json_parsed)
         results = compile_input.all()
-        faction_history = [result for result in results]
+        faction_history = [FactionState(result["Name"], result["Active"], result["Pending"]) for result in results]
         return faction_history

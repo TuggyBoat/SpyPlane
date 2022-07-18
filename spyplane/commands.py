@@ -3,6 +3,7 @@ from discord import Interaction, app_commands
 from spyplane._metadata import __version__
 from spyplane.constants import log
 from spyplane.services.config_service import ConfigService
+from spyplane.services.daily_faction_state_service import DailyFactionStateService
 from spyplane.services.sync_service import SyncService
 from spyplane.services.systems_posting_service import SystemsPostingService
 from spyplane.spy_plane import bot
@@ -36,6 +37,14 @@ async def post_systems(interaction: Interaction):
     print(f'User {interaction.user.name} is posting the systems to scout: {__version__}.')
     await SystemsPostingService().publish_systems_to_scout()
     await interaction.followup.send(f"Spy plane is now on the prowl!")
+
+@bot.tree.command(name='spy_plane_report', description="Show the current status of monitored systems")
+async def report(interaction: Interaction):
+    """Show the current status of monitored systems"""
+    await interaction.response.defer(ephemeral=True)
+    print(f'User {interaction.user.name} is requesting report of monitored systems: {__version__}.')
+    await DailyFactionStateService().notify_daily_news(interaction.channel)
+    await interaction.followup.send(f"Spy plane report complete.")
 
 
 @bot.tree.command(name='spy_plane_sync', description="syncs the db to sheets")
