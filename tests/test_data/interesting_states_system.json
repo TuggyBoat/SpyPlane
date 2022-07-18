@@ -1,0 +1,293 @@
+{
+    "docs": [
+        {
+            "_id": "59e7cb1fd22c775be0ff1919",
+            "__v": 0,
+            "allegiance": "empire",
+            "conflicts": [
+                {
+                    "type": "election",
+                    "status": "active",
+                    "faction1": {
+                        "faction_id": "59e7cb1fd22c775be0ff1936",
+                        "name": "Verner Imperial Society",
+                        "name_lower": "verner imperial society",
+                        "station_id": "None",
+                        "stake": "Regent's Centre",
+                        "stake_lower": "regent's centre",
+                        "days_won": 1
+                    },
+                    "faction2": {
+                        "faction_id": "59e7cb1fd22c775be0ff193c",
+                        "name": "Allied Beatis Nationalists",
+                        "name_lower": "allied beatis nationalists",
+                        "station_id": "None",
+                        "stake": "",
+                        "stake_lower": "",
+                        "days_won": 0
+                    }
+                }
+            ],
+            "controlling_minor_faction": "beatis citizens' forum",
+            "controlling_minor_faction_cased": "Beatis Citizens' Forum",
+            "controlling_minor_faction_id": "59e7cb1fd22c775be0ff1934",
+            "eddb_id": 2110,
+            "factions": [
+                {
+                    "name": "CPD-59 314 Imperial Society",
+                    "name_lower": "cpd-59 314 imperial society",
+                    "faction_id": "59e7d8ffd22c775be0ff8b09",
+                    "faction_details": {
+                        "_id": "59e7d8ffd22c775be0ff8b09",
+                        "__v": 0,
+                        "allegiance": "empire",
+                        "eddb_id": 9264,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "none",
+                            "influence": 0.184476,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "patronage",
+                        "name": "CPD-59 314 Imperial Society",
+                        "name_lower": "cpd-59 314 imperial society",
+                        "updated_at": "2022-07-17T17:12:20.000Z"
+                    }
+                },
+                {
+                    "name": "Beatis Republic Party",
+                    "name_lower": "beatis republic party",
+                    "faction_id": "59e7cb1fd22c775be0ff192d",
+                    "faction_details": {
+                        "_id": "59e7cb1fd22c775be0ff192d",
+                        "__v": 0,
+                        "allegiance": "independent",
+                        "eddb_id": 74768,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "none",
+                            "influence": 0.115927,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "democracy",
+                        "name": "Beatis Republic Party",
+                        "name_lower": "beatis republic party",
+                        "updated_at": "2022-07-17T00:46:56.000Z"
+                    }
+                },
+                {
+                    "name": "Verner Imperial Society",
+                    "name_lower": "verner imperial society",
+                    "faction_id": "59e7cb1fd22c775be0ff1936",
+                    "faction_details": {
+                        "_id": "59e7cb1fd22c775be0ff1936",
+                        "__v": 0,
+                        "allegiance": "empire",
+                        "eddb_id": 13582,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "election",
+                            "influence": 0.097782,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [
+                                {
+                                    "state": "expansion"
+                                },
+                                {
+                                    "state": "election"
+                                }
+                            ],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [
+                                {
+                                    "type": "election",
+                                    "status": "active",
+                                    "opponent_name": "Allied Beatis Nationalists",
+                                    "opponent_name_lower": "allied beatis nationalists",
+                                    "opponent_faction_id": "59e7cb1fd22c775be0ff193c",
+                                    "station_id": "None",
+                                    "stake": "Regent's Centre",
+                                    "stake_lower": "regent's centre",
+                                    "days_won": 1
+                                }
+                            ],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "patronage",
+                        "name": "Verner Imperial Society",
+                        "name_lower": "verner imperial society",
+                        "updated_at": "2022-07-17T16:18:54.000Z"
+                    }
+                },
+                {
+                    "name": "Beatis Jet Universal Solutions",
+                    "name_lower": "beatis jet universal solutions",
+                    "faction_id": "59e7cb1fd22c775be0ff192e",
+                    "faction_details": {
+                        "_id": "59e7cb1fd22c775be0ff192e",
+                        "__v": 0,
+                        "allegiance": "federation",
+                        "eddb_id": 74769,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "none",
+                            "influence": 0.108871,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "corporate",
+                        "name": "Beatis Jet Universal Solutions",
+                        "name_lower": "beatis jet universal solutions",
+                        "updated_at": "2022-07-17T00:46:56.000Z"
+                    }
+                },
+                {
+                    "name": "Beatis Citizens' Forum",
+                    "name_lower": "beatis citizens' forum",
+                    "faction_id": "59e7cb1fd22c775be0ff1934",
+                    "faction_details": {
+                        "_id": "59e7cb1fd22c775be0ff1934",
+                        "__v": 0,
+                        "allegiance": "empire",
+                        "eddb_id": 39949,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "none",
+                            "influence": 0.339718,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "patronage",
+                        "name": "Beatis Citizens' Forum",
+                        "name_lower": "beatis citizens' forum",
+                        "updated_at": "2022-07-17T00:46:56.000Z"
+                    }
+                },
+                {
+                    "name": "Beatis Industries",
+                    "name_lower": "beatis industries",
+                    "faction_id": "59e7cb1fd22c775be0ff193b",
+                    "faction_details": {
+                        "_id": "59e7cb1fd22c775be0ff193b",
+                        "__v": 0,
+                        "allegiance": "independent",
+                        "eddb_id": 74770,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "none",
+                            "influence": 0.055444,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "corporate",
+                        "name": "Beatis Industries",
+                        "name_lower": "beatis industries",
+                        "updated_at": "2022-07-17T00:46:56.000Z"
+                    }
+                },
+                {
+                    "name": "Allied Beatis Nationalists",
+                    "name_lower": "allied beatis nationalists",
+                    "faction_id": "59e7cb1fd22c775be0ff193c",
+                    "faction_details": {
+                        "_id": "59e7cb1fd22c775be0ff193c",
+                        "__v": 0,
+                        "allegiance": "independent",
+                        "eddb_id": 74771,
+                        "faction_presence": {
+                            "system_name": "Beatis",
+                            "system_name_lower": "beatis",
+                            "system_id": "59e7cb1fd22c775be0ff1919",
+                            "state": "election",
+                            "influence": 0.097782,
+                            "happiness": "$faction_happinessband2;",
+                            "active_states": [
+                                {
+                                    "state": "election"
+                                }
+                            ],
+                            "pending_states": [],
+                            "recovering_states": [],
+                            "conflicts": [
+                                {
+                                    "type": "election",
+                                    "status": "active",
+                                    "opponent_name": "Verner Imperial Society",
+                                    "opponent_name_lower": "verner imperial society",
+                                    "opponent_faction_id": "59e7cb1fd22c775be0ff1936",
+                                    "station_id": "None",
+                                    "stake": "",
+                                    "stake_lower": "",
+                                    "days_won": 0
+                                }
+                            ],
+                            "updated_at": "2022-07-17T00:46:56.000Z"
+                        },
+                        "government": "dictatorship",
+                        "name": "Allied Beatis Nationalists",
+                        "name_lower": "allied beatis nationalists",
+                        "updated_at": "2022-07-17T00:46:56.000Z"
+                    }
+                }
+            ],
+            "government": "$government_patronage;",
+            "name": "Beatis",
+            "name_lower": "beatis",
+            "population": 8229966918,
+            "primary_economy": "$economy_agri;",
+            "secondary_economy": "$economy_industrial;",
+            "security": "$system_security_high;",
+            "state": "none",
+            "system_address": "972566808939",
+            "updated_at": "2022-07-17T00:46:56.000Z",
+            "x": 77.9375,
+            "y": -47.0625,
+            "z": -12.59375,
+            "name_aliases": []
+        }
+    ],
+    "total": 1,
+    "limit": 10,
+    "page": 1,
+    "pages": 1,
+    "pagingCounter": 1,
+    "hasPrevPage": "False",
+    "hasNextPage": "False",
+    "prevPage": "None",
+    "nextPage": "None"
+}
