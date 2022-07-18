@@ -14,6 +14,9 @@ faction_active_state_query = '''
 
 #  
 class EliteBgsService:
+    """
+    Provides factions with interesting (not-none) states.
+    """
     def __init__(self):
         self.compiled_faction_active_state_query = jq.compile(faction_active_state_query)
 
