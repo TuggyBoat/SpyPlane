@@ -19,6 +19,8 @@ APPLICATION_ID = os.getenv('APPLICATION_ID_PROD') if flag_production else os.get
 GUILD_ID = os.getenv('PROD_DISCORD_GUILD') if flag_production else os.getenv('TEST_DISCORD_GUILD')
 CONTROL_CHANNEL = int(os.getenv('PROD_SPY_PLANE_CHANNEL_ID')) if flag_production else \
     int(os.getenv('TEST_SPY_PLANE_CHANNEL_ID'))
+REPORT_CHANNEL = int(os.getenv('PROD_SPY_PLANE_REPORT_CHANNEL_ID')) if flag_production else \
+    int(os.getenv('TEST_SPY_PLANE_REPORT_CHANNEL_ID'))
 TICK_CHANNEL = int(os.getenv('PROD_TICK_DETECTION_CHANNEL_ID')) if flag_production else \
     int(os.getenv('TEST_TICK_DETECTION_CHANNEL_ID'))
 DB_PATH = './test_workspace/spyplane.db' if 'tests' in os.getcwd() else './workspace/spyplane.db'

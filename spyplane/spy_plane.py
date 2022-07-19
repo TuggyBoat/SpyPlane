@@ -19,6 +19,7 @@ class SpyPlane(Client):
         self.lock: Optional[Lock] = None
         self.emoji_bullseye: Optional[Emoji] = None
         self.channel: Optional[Union[GuildChannel, Thread, PrivateChannel]] = None
+        self.report_channel: Optional[Union[GuildChannel, Thread, PrivateChannel]] = None
 
     async def setup_hook(self):
         discord_server_object = Object(id=GUILD_ID)

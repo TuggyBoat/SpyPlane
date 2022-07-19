@@ -3,7 +3,7 @@ import asyncio
 from discord import RawReactionActionEvent, Message
 
 from spyplane._metadata import __version__
-from spyplane.constants import CONTROL_CHANNEL, EMOJI_BULLSEYE, log, log_exception
+from spyplane.constants import CONTROL_CHANNEL, REPORT_CHANNEL, EMOJI_BULLSEYE, log, log_exception
 from spyplane.services.post_after_tick_service import PostAfterTickService
 from spyplane.services.scout_recording_service import ScoutRecordingService
 from spyplane.spy_plane import bot
@@ -27,6 +27,7 @@ record_service = ScoutRecordingService()
 async def on_ready():
     log(f'{bot.user.name} has connected to Discord server. Version: {__version__}')
     bot.channel = bot.get_channel(CONTROL_CHANNEL)
+    bot.report_channel = bot.get_channel(REPORT_CHANNEL)
     bot.lock = asyncio.Lock()
     emoji = bot.get_emoji(EMOJI_BULLSEYE)
     bot.emoji_bullseye = emoji or '✅'
