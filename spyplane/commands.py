@@ -41,10 +41,10 @@ async def post_systems(interaction: Interaction):
 @bot.tree.command(name='spy_plane_report', description="Show the current status of monitored systems")
 async def report(interaction: Interaction):
     """Show the current status of monitored systems"""
-    await interaction.response.defer(ephemeral=True)
+    await interaction.response.defer()
     print(f'User {interaction.user.name} is requesting report of monitored systems: {__version__}.')
     await DailyFactionStateService().notify_daily_news(interaction.channel)
-    await interaction.followup.send(f"Spy plane report complete.")
+    await interaction.followup.send(f"Classified Surveillance Report | FactionOps eyes-only")
 
 
 @bot.tree.command(name='spy_plane_sync', description="syncs the db to sheets")
