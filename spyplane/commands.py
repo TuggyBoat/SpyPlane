@@ -98,7 +98,6 @@ async def emoji_test_utility(interaction: Interaction, id: str):
 async def spy_plane_operations_report(interaction: Interaction):
     """Top Secret: Classified agent activity report. Faction Command Eyes-Only."""
     await interaction.response.defer()
-    await interaction.channel.send("Our top analyst is on it..")
     exitcode = await run_export_script(interaction.channel.send)
     if exitcode==0:
         print("[INFO] Export completed successfully.")
