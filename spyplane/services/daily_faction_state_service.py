@@ -39,10 +39,11 @@ class DailyFactionStateService:
         faction_states_list = await self.ebgs.get_system_faction_not_none_states(system)
         faction_states_sans_expansion = [faction_state for faction_state in faction_states_list if not faction_state.is_just_expansion()]
         if len(faction_states_sans_expansion):
-            embed.add_field(name=system, value=self.combine(faction_states_list), inline=False)
+            embed.add_field(name=system, value=self.combine(faction_states_sans_expansion), inline=False)
         for faction_state in faction_states_list:
             if faction_state.is_just_expansion():
-                factions_in_expansion.append(faction_state.name) 
+                suffix = " (Pending)" if faction_state.is_expansion_pending() else " (Active)"
+                factions_in_expansion.append(faction_state.name + suffix) 
 
     @staticmethod
     def combine(faction_states_list: List[FactionState]) -> str:
