@@ -9,7 +9,7 @@ class FactionState:
     pending: str = ""
 
     def is_just_expansion(self) -> bool:
-        return self.active == "expansion"
+        return self.active == "expansion" or self.pending == "expansion"
         
     def short_form(self) -> str:
         short = f"{self.name} -"

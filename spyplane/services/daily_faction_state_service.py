@@ -23,7 +23,7 @@ class DailyFactionStateService:
         self.ebgs: EliteBgsService = ebgs
 
     async def notify_daily_news(self, channel = None):
-        embed = self.common_embed_setup("None", "Factions in Expansion")
+        embed = self.common_embed_setup("None", "Factions Expanding")
         systems = self.sheets.read_daily_sheet()
         valid_systems = [
             system for system in systems if await self.repo.is_valid_system(system)
