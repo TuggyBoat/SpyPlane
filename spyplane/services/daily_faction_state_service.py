@@ -4,7 +4,7 @@ from typing import List
 from datetime import datetime
 
 import discord
-from spyplane.constants import log_exception
+from spyplane.constants import log_exception, log
 from spyplane.database.systems_repository import SystemsRepository
 from spyplane.models.system_state import FactionState
 from spyplane.services.ebgs_service import EliteBgsService
@@ -29,6 +29,9 @@ class DailyFactionStateService:
         valid_systems = [
             system for system in systems if await self.repo.is_valid_system(system)
         ]  # Select N+1 issue, but we can tolerate this for a while!
+        invalid_systems = list(set(systems) - set(valid_systems))
+        for system in invalid_systems:
+            log("INVALID SYSTEM DAILY REPORT: " + system) 
         factions_in_expansion = []
         tasks = [self.ebgs_task(system, embed, factions_in_expansion) for system in valid_systems]
         await asyncio.gather(*tasks)
