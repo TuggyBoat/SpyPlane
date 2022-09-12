@@ -13,7 +13,9 @@ class SpreadsheetHelper:
 
     def __init__(self, sheet: str = "Faction Scouting"):
         self.sheet_name = sheet
-        self.wks = gc.open(self.sheet_name).sheet1
+        document = gc.open(self.sheet_name)
+        self.faction_scouting = document.sheet1
+        self.daily = document.worksheet("daily")
         self.light_red = {
             "red": 0.957,
             "green": 0.8,
@@ -37,13 +39,13 @@ class SpreadsheetHelper:
                 "backgroundColor": self.light_red
             }
         } for i in invalid]
-        self.wks.batch_format(formats)
+        self.faction_scouting.batch_format(formats)
 
     def mark_row_scout(self, rownum, user_name, user_id, ts: datetime):
-        self.wks.update(f"C{rownum + 1}", [[user_name, str(user_id), "{:%b %d %H:%M:%S}".format(ts)]])
+        self.faction_scouting.update(f"C{rownum + 1}", [[user_name, str(user_id), "{:%b %d %H:%M:%S}".format(ts)]])
 
     def read_whole_sheet(self) -> List[ScoutSystem]:
-        list_of_lists = self.wks.get_all_values()
+        list_of_lists = self.faction_scouting.get_all_values()
         ss_list = []
         for index, row in enumerate(list_of_lists):
             column_a = clean(row[0])
@@ -52,6 +54,14 @@ class SpreadsheetHelper:
                 ss_list.append(ScoutSystem(column_a, column_b, index))
         return ss_list
 
+    def read_daily_sheet(self) -> List[str]:
+        list_of_lists = self.daily.get_all_values()
+        ss_list = []
+        for row in list_of_lists:
+            column_a = clean(row[0])
+            if column_a!="System" and not column_a.startswith('#'):
+                ss_list.append(column_a)
+        return ss_list
 
 def clean(s: str):
     return "".join(ch for ch in s.strip() if unicodedata.category(ch)[0] not in ["C", "M"])

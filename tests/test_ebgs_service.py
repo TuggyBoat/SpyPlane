@@ -15,14 +15,14 @@ class EliteBgsServiceTests(IsolatedAsyncioTestCase):
 
     @mock.patch('aiohttp.ClientSession.get', side_effect=test_data.mocked_requests_get)
     async def test_get_system_faction_not_none_states_all_none(self, mocked_get):
-        json = await self.subject.get_system_faction_not_none_states('Wally Bei')
-        self.assertEqual(len(json), 0)
+        list_system_states = await self.subject.get_system_faction_not_none_states('Wally Bei')
+        self.assertEqual(len(list_system_states), 0)
 
     @mock.patch('aiohttp.ClientSession.get', side_effect=test_data.mocked_requests_get)
     async def test_get_system_faction_not_none_states_some_interesting(self, mocked_get):
-        json = await self.subject.get_system_faction_not_none_states('Beatis')
-        self.assertEqual(len(json), 2)
-        self.assertEqual(json[0]['Name'], 'Verner Imperial Society')
-        self.assertEqual(json[0]['Active'], 'expansion,election')
-        self.assertEqual(json[1]['Name'], 'Allied Beatis Nationalists')
-        self.assertEqual(json[1]['Active'], 'election')
+        list_system_states = await self.subject.get_system_faction_not_none_states('Beatis')
+        self.assertEqual(len(list_system_states), 2)
+        self.assertEqual(list_system_states[0].name, 'Verner Imperial Society')
+        self.assertEqual(list_system_states[0].active, 'expansion,election')
+        self.assertEqual(list_system_states[1].name, 'Allied Beatis Nationalists')
+        self.assertEqual(list_system_states[1].active, 'election')

@@ -26,6 +26,12 @@ where s.priority != '' and printf("%d", s.priority) = s.priority
 order by rownum
 '''
 
+get_is_valid_system_query = '''
+select name
+from systems
+where name = ?
+'''
+
 remove_scouted_system = '''
 delete from scout_systems_posted where system_name=?
 '''
@@ -60,6 +66,11 @@ class SystemsRepository(BaseRepository):
 
     async def get_valid_systems(self) -> List[ScoutSystem]:
         return await self.get_systems(get_valid_systems_query)
+    
+    async def is_valid_system(self, system: str) -> bool:
+        async with self.db().execute(get_is_valid_system_query, [system]) as cur:
+            row = await cur.fetchone()
+            return row[0] and row[0] == system
 
     async def get_carryover_systems(self) -> List[ScoutSystem]:
         return await self.get_systems(get_post_systems)
