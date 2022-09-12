@@ -25,12 +25,15 @@ record_service = ScoutRecordingService()
 
 @bot.event
 async def on_ready():
-    log(f'{bot.user.name} has connected to Discord server. Version: {__version__}')
-    bot.channel = bot.get_channel(CONTROL_CHANNEL)
-    bot.report_channel = bot.get_channel(REPORT_CHANNEL)
-    bot.lock = asyncio.Lock()
-    emoji = bot.get_emoji(EMOJI_BULLSEYE)
-    bot.emoji_bullseye = emoji or '✅'
+    try:
+        log(f'{bot.user.name} has connected to Discord server. Version: {__version__}')
+        bot.channel = bot.get_channel(CONTROL_CHANNEL)
+        bot.report_channel = bot.get_channel(REPORT_CHANNEL)
+        bot.lock = asyncio.Lock()
+        emoji = bot.get_emoji(EMOJI_BULLSEYE)
+        bot.emoji_bullseye = emoji or '✅'
+    except Exception as e:
+        log_exception("on_ready", e)
 
     # Cron in not needed anymore, we are able to read embeds, and BGS Bot messages can trigger spy plane.
     # await bot.channel.send(f'{bot.user.name} has connected to Discord server. Version: {__version__}')

@@ -4,6 +4,7 @@ from typing import List
 from datetime import datetime
 
 import discord
+from spyplane.constants import log_exception
 from spyplane.database.systems_repository import SystemsRepository
 from spyplane.models.system_state import FactionState
 from spyplane.services.ebgs_service import EliteBgsService
@@ -36,14 +37,17 @@ class DailyFactionStateService:
         await (channel or bot.report_channel).send(embed=embed)
     
     async def ebgs_task(self, system, embed, factions_in_expansion: List[str]):
-        faction_states_list = await self.ebgs.get_system_faction_not_none_states(system)
-        faction_states_sans_expansion = [faction_state for faction_state in faction_states_list if not faction_state.is_just_expansion()]
-        if len(faction_states_sans_expansion):
-            embed.add_field(name=system, value=self.combine(faction_states_sans_expansion), inline=False)
-        for faction_state in faction_states_list:
-            if faction_state.is_just_expansion():
-                suffix = " (Pending)" if faction_state.is_expansion_pending() else " (Active)"
-                factions_in_expansion.append(faction_state.name + suffix) 
+        try:
+            faction_states_list = await self.ebgs.get_system_faction_not_none_states(system)
+            faction_states_sans_expansion = [faction_state for faction_state in faction_states_list if not faction_state.is_just_expansion()]
+            if len(faction_states_sans_expansion):
+                embed.add_field(name=system, value=self.combine(faction_states_sans_expansion), inline=False)
+            for faction_state in faction_states_list:
+                if faction_state.is_just_expansion():
+                    suffix = " (Pending)" if faction_state.is_expansion_pending() else " (Active)"
+                    factions_in_expansion.append(faction_state.name + suffix) 
+        except Exception as e:
+            log_exception("ebgs_task for " + system, e)
 
     @staticmethod
     def combine(faction_states_list: List[FactionState]) -> str:

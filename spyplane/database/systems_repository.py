@@ -70,7 +70,7 @@ class SystemsRepository(BaseRepository):
     async def is_valid_system(self, system: str) -> bool:
         async with self.db().execute(get_is_valid_system_query, [system]) as cur:
             row = await cur.fetchone()
-            return row[0] and row[0] == system
+            return row and row[0] and row[0] == system
 
     async def get_carryover_systems(self) -> List[ScoutSystem]:
         return await self.get_systems(get_post_systems)
