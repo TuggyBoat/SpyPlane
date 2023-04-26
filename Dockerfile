@@ -1,7 +1,7 @@
 FROM python:3.10-slim-buster
 RUN apt update
 # lib32z1 is required for running the sqlite3 binary
-RUN apt-get install -qq -y jq curl wget lib32z1
+RUN apt-get install -qq -y jq curl wget lib32z1 git
 RUN mkdir /app
 RUN wget -qO- https://repo1.maven.org/maven2/org/flywaydb/flyway-commandline/8.5.12/flyway-commandline-8.5.12-linux-x64.tar.gz | tar xvz && ln -s `pwd`/flyway-8.5.12/flyway /usr/local/bin
 WORKDIR /app
