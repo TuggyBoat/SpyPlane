@@ -1,4 +1,4 @@
-FROM python:latest
+FROM python:3.10-slim-buster
 RUN apt update
 # lib32z1 is required for running the sqlite3 binary
 RUN apt-get install -qq -y jq curl wget lib32z1
