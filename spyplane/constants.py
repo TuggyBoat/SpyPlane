@@ -8,7 +8,7 @@ load_dotenv(find_dotenv())
 flag_production = ast.literal_eval(os.environ.get('PRODUCTION', 'False'))
 
 # Common environment variables
-GDRIVE_TOKEN = os.path.join(os.getcwd(), 'token.json') if "/tests" not in os.getcwd() else os.path.join(os.getcwd(), '../token.json')  # CWD = /tests/ for tests
+GDRIVE_TOKEN = os.path.join(os.getcwd(), 'workspace/token.json') if "/tests" not in os.getcwd() else os.path.join(os.getcwd(), '../token.json')  # CWD = /tests/ for tests
 BGS_BOT_USER_ID = int(os.getenv('BGS_BOT_USER_ID'))
 
 # Environment specific vars
