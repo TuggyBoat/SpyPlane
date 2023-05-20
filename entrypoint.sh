@@ -6,7 +6,7 @@ if [[ -z "${DB_RECREATE-}" ]]; then
 else
   echo "DB_RECREATE: ${DB_RECREATE} is defined, creating a new DB"
   rm -rf ./workspace/spyplane.db
-  ./db/sqlite3 ./workspace/spyplane.db < ./db/data/spyplane_import.sql
+  sqlite3 ./workspace/spyplane.db < ./db/data/spyplane_import.sql
 fi
 
 flyway migrate

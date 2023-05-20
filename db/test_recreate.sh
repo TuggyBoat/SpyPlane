@@ -2,4 +2,4 @@
 
 rm -rf ./tests/test_workspace/spyplane.db
 flyway -url='jdbc:sqlite:tests/test_workspace/spyplane.db' migrate
-./db/sqlite3 ./tests/test_workspace/spyplane.db < ./db/data/spyplane_import.sql
+sqlite3 ./tests/test_workspace/spyplane.db < ./db/data/spyplane_import.sql
