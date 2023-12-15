@@ -31,7 +31,7 @@ SQL_PATH = os.path.join(DATA_DIR, 'database', 'db_sql')  # path to use for SQL d
 load_dotenv(os.path.join(DATA_DIR, '.env'))
 
 # google credentials
-gc = gspread.service_account(filename=os.path.join(DATA_DIR, 'spyplane-394209-39d59161dedb.json'))
+gc = gspread.service_account(filename=os.path.join(DATA_DIR, 'spyplane-gspread-token.json'))
 
 # define bot token
 TOKEN = os.getenv('SPYPLANE_DISCORD_TOKEN_PROD') if _production else os.getenv('SPYPLANE_DISCORD_TOKEN_TESTING')

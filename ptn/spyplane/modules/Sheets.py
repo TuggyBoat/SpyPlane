@@ -6,12 +6,10 @@ from datetime import datetime
 import gspread
 import pandas as pd
 
-from ptn.spyplane.database.database import get_last_tick, update_system
+from ptn.spyplane.database.database import get_last_tick
 
 from ptn.spyplane.constants import gc
-from ptn.spyplane.modules.Helpers import get_ebgs_systems
 
-# gc = gspread.service_account('../data/spyplane-394209-39d59161dedb.json')
 # Spreadsheet
 sheet = gc.open("Faction Scouting")
 
@@ -22,6 +20,7 @@ worksheet = sheet.get_worksheet_by_id(0)
 values = worksheet.get_values('A:E')
 headers = values.pop(0)
 sheet_dataframe = pd.DataFrame(values, columns=headers)
+sheet_dataframe = sheet_dataframe[~sheet_dataframe['System'].str.startswith('#')]
 
 
 def get_sheet_row(row_name):
@@ -45,9 +44,6 @@ async def update_row(row_name, username, user_id, timestamp):
             sheet_dataframe.at[df_index[0], sheet_dataframe.columns[2]] = username
             sheet_dataframe.at[df_index[0], sheet_dataframe.columns[3]] = user_id
             sheet_dataframe.at[df_index[0], sheet_dataframe.columns[4]] = timestamp
-
-        # update database
-        await update_system(system_name=row_name, last_update=timestamp)
 
         return True
 

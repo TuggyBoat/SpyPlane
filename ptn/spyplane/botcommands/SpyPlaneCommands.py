@@ -37,6 +37,8 @@ class SpyPlaneCommands(commands.Cog):
     @app_commands.command(name='spy_plane_launch')
     @check_roles(constants.op_plus)
     async def spy_plane_launch(self, interaction: discord.Interaction):
+        await interaction.response.defer(ephemeral=True, thinking=True)
+        await interaction.followup.send(ephemeral=True, content="Systems posted")
         await post_scouting()
 
     @app_commands.command(name='spy_plane_config_list', description='Get the configuration settings for spyplane')

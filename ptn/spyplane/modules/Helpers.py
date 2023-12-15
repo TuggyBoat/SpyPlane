@@ -21,57 +21,6 @@ Helpers for main functions
 """
 
 
-def get_ebgs_systems(systems: list):
-    """
-    :param systems: list
-    :return: dict
-    """
-    api_endpoint = "https://elitebgs.app/api/ebgs/v5/systems"
-
-    # Construct the parameters dynamically
-    params = {f'name[{index}]': system.strip() for index, system in enumerate(systems)}
-
-    # GET request
-    response = requests.get(api_endpoint, params=params)
-
-    # Check if request was successful
-    if response.status_code == 200:
-        data = response.json()
-        timestamps = {}
-
-        for doc in data['docs']:
-            system_name = doc['name']
-            update_time = doc['updated_at']
-            dt_obj = datetime.strptime(update_time, "%Y-%m-%dT%H:%M:%S.%fZ")
-            timestamp = dt_obj.timestamp()
-            timestamps[system_name] = timestamp
-
-        return timestamps
-    else:
-        # Handle errors or return False or an empty dictionary
-        return False
-
-
-def fetch_current_tick() -> int:
-    hdr = {
-        'User-Agent': 'curl/7.68.0',
-        'Accept': '*/*'
-    }
-    link = "https://elitebgs.app/api/ebgs/v5/ticks"
-    response = requests.get(link)
-    return response.json()
-
-
-print(fetch_current_tick())
-
-
-def time_to_timestamp(date_str):
-    date_format = "%d/%m/%Y %H:%M:%S"
-    datetime_obj = datetime.strptime(date_str, date_format)
-
-    return int(time.mktime(datetime_obj.timetuple()))
-
-
 async def clear_scout_messages():
     guild = bot.get_guild(bot_guild())
     scout_channel = guild.get_channel(channel_scout())

@@ -52,8 +52,7 @@ async def build_database_on_startup():
         database_table_map = {
             'config_data': {'obj': spyplane_db, 'create': config_table_create},
             'tick_times': {'obj': spyplane_db, 'create': tick_times_table_create},
-            'scout_data': {'obj': spyplane_db, 'create': scout_data_table_create},
-            'scout_system_data': {'obj': spyplane_db, 'create': scout_system_table_create}
+            'scout_data': {'obj': spyplane_db, 'create': scout_data_table_create}
         }
 
         for table_name in database_table_map:
@@ -89,14 +88,6 @@ scout_data_table_create = '''
         username TEXT NOT NULL,
         user_id INTEGER NOT NULL,
         timestamp INTEGER NOT NULL
-    )
-'''
-scout_system_table_create = '''
-    CREATE TABLE scout_system_data(
-        entry_id INTEGER PRIMARY KEY,
-        system_name TEXT NOT NULL UNIQUE,
-        last_update INTEGER NOT NULL,
-        priority INTEGER NOT NULL
     )
 '''
 
@@ -277,23 +268,6 @@ async def update_config(config_setting: str, config_value: str):
 
         spyplane_db.execute(update_sql, (config_value, config_setting))
         spyplane_conn.commit()
-    finally:
-        spyplane_db_lock.release()
-
-
-async def update_system(system_name: str, last_update: int):
-    """
-    Updates the given system in the scout system database
-    :param system_name: str
-    :param last_update: int
-    """
-    try:
-        await spyplane_db_lock.acquire()
-
-        update_sql = '''UPDATE scout_system_data SET last_update = ? WHERE system_name = ?'''
-
-        spyplane_db.execute(update_sql, (last_update, system_name))
-
     finally:
         spyplane_db_lock.release()
 
