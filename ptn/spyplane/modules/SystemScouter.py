@@ -84,6 +84,12 @@ async def delayed_scout_update():
     print('Scouting post done.')
 
 
+async def force_scout():
+    await clear_scout_messages()
+    await post_scouting()
+    print('Forced scouting')
+
+
 async def log_scout(system_name, member_name, member_id):
     """
     :param system_name:

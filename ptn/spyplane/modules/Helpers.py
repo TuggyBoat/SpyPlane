@@ -3,10 +3,11 @@ import asyncio
 import pprint
 import time
 import urllib
-from datetime import datetime
+from datetime import datetime, timedelta
 from urllib.request import urlopen
 
 import discord
+import numpy
 import requests
 from discord import app_commands
 
@@ -76,3 +77,56 @@ def check_roles(permitted_role_ids):
         return permission
 
     return app_commands.check(checkroles)
+
+
+"""
+Average Tick Helper
+"""
+
+
+def get_past_7_days_ticks():
+    """
+    Gets past 7 days in ticks
+    """
+    now = datetime.now()
+    seven_days_ago = now - timedelta(days=7)
+    seven_days_ago_unix_timestamp = int(seven_days_ago.timestamp() * 1000)
+    api_endpoint = "https://elitebgs.app/api/ebgs/v5/ticks"
+    params = {"timeMin": seven_days_ago_unix_timestamp}
+    response = requests.get(api_endpoint, params=params)
+    if response.status_code == 200:
+        data = response.json()
+        ticks = []
+        for tick in data:
+            ticks.append(tick["updated_at"])
+        return ticks
+
+
+def get_average_tick_times():
+    """
+    Gets the average interval between tick
+    return: int
+    """
+    tick_times = get_past_7_days_ticks()
+    # Convert to datetime objects
+    tick_times = [datetime.fromisoformat(t.replace("Z", "+00:00")) for t in tick_times]
+
+    # Calculate intervals (in hours or your preferred unit)
+    intervals = [abs((tick_times[i] - tick_times[i + 1]).total_seconds() / 3600) for i in range(len(tick_times) - 1)]
+
+    # Remove outliers using IQR
+    Q1 = numpy.percentile(intervals, 25)
+    Q3 = numpy.percentile(intervals, 75)
+    IQR = Q3 - Q1
+
+    # Define bounds for outliers
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+
+    # Filter out outliers
+    filtered_intervals = [i for i in intervals if lower_bound <= i <= upper_bound]
+
+    # Calculate average interval
+    average_interval = sum(filtered_intervals) / len(filtered_intervals)
+
+    return average_interval

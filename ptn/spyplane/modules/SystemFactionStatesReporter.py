@@ -115,3 +115,16 @@ async def delayed_system_state_update():
     if not past_states_time:
         await asyncio.sleep(time_until_states)  # sleep an amount of time
     await post_system_state_report()
+
+
+async def force_state_update():
+    system_state_interval = await get_system_state_interval()
+    current_time = int(time.time())
+    expected_tick = current_time - 18000
+    time_at_states = expected_tick + system_state_interval
+    past_states_time = time_at_states <= current_time
+    time_until_states = time_at_states - current_time
+    print('System State Reporting interval is ' + str(system_state_interval))
+    if not past_states_time:
+        await asyncio.sleep(time_until_states)  # sleep an amount of time
+    await post_system_state_report()

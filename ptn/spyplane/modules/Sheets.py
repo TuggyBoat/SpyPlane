@@ -61,6 +61,9 @@ async def post_list_by_priority():
 
     api_check_systems = []
     for system in systems_list:
+        if not system[2]:
+            api_check_systems.append(system)
+            continue
         dt_obj = datetime.strptime(system[2], "%d/%m/%Y %H:%M:%S")
         timestamp = int(time.mktime(dt_obj.timetuple()))
         difference_from_tick = ((last_tick - timestamp)/3600)
