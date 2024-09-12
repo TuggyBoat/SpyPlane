@@ -29,6 +29,10 @@ async def post_scouting():
     # Get systems and priorities
     systems = await post_list_by_priority()
 
+    if not systems:
+        print('No systems to scout')
+        return
+
     # clear channel
     await clear_scout_messages()
 
