@@ -36,6 +36,10 @@ async def post_scouting():
     # clear channel
     await clear_scout_messages()
 
+    if not systems:
+        return await scout_channel.send('All systems have been scouted, come back next tick for a new list.')
+
+
     current_priority = '1'
     await scout_channel.send('## Primary List')
     for system in systems:

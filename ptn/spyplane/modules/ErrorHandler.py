@@ -11,7 +11,7 @@ Dependends on: constants
 import discord
 from discord import Interaction, app_commands
 from discord.app_commands import AppCommandError
-
+import traceback
 # import local constants
 import ptn.spyplane.constants as constants
 from ptn.spyplane.constants import channel_botspam
@@ -48,19 +48,19 @@ A primitive global error handler for all app commands (slash & ctx menus)
 
 returns: the error message to the user and log
 """
-async def on_generic_error(
-    interaction: Interaction,
-    error
-): # an error handler for our custom errors
+
+
+async def on_generic_error(interaction: Interaction, error):
     try:
         spamchannel = bot.get_channel(channel_botspam())
+        error_trace = "".join(traceback.format_exception(type(error), error, error.__traceback__))
         spam_embed = discord.Embed(
-            description=f"Error from `{interaction.command.name}` in <#{interaction.channel.id}> called by <@{interaction.user.id}>: ```{error}```",
+            description=f"Error from `{interaction.command.name}` in <#{interaction.channel.id}> called by <@{interaction.user.id}>: ```{error_trace}```",
             color=constants.EMBED_COLOUR_ERROR
         )
         await spamchannel.send(embed=spam_embed)
     except Exception as e:
-        print(e)
+        print(f"Failed to log error: {e}")
 
     if isinstance(error, GenericError):
         print(f"Generic error raised: {error}")
@@ -73,7 +73,7 @@ async def on_generic_error(
         except:
             await interaction.followup.send(embed=embed, ephemeral=True)
 
-    elif isinstance(error, CustomError): # this class receives custom error messages and displays either privately or publicly
+    elif isinstance(error, CustomError):
         message = error.message
         isprivate = error.isprivate
         print(f"Raised CustomError from {error} with message {message}")
@@ -81,33 +81,35 @@ async def on_generic_error(
             description=f"❌ {message}",
             color=constants.EMBED_COLOUR_ERROR
         )
-        if isprivate: # message should be ephemeral
+        if isprivate:
             try:
                 await interaction.response.send_message(embed=embed, ephemeral=True)
             except:
                 await interaction.followup.send(embed=embed, ephemeral=True)
-        else: # message should be public - use for CCO commands
+        else:
             try:
                 await interaction.response.send_message(embed=embed)
             except:
                 await interaction.followup.send(embed=embed)
 
     else:
-        print(f"Error {error} was not caught by on_generic_error")
+        print(f"Unhandled error: {error_trace}")
+        embed = discord.Embed(
+            description=f"❌ An unexpected error occurred.\n```{error_trace}```",
+            color=constants.EMBED_COLOUR_ERROR
+        )
+        await interaction.response.send_message(embed=embed, ephemeral=True)
 
 
-async def on_app_command_error(
-    interaction: Interaction,
-    error: AppCommandError
-): # an error handler for discord.py errors
-    print(f"Error from {interaction.command.name} in {interaction.channel.name} called by {interaction.user.display_name}: {error}")
+async def on_app_command_error(interaction: Interaction, error: AppCommandError):
+    error_trace = "".join(traceback.format_exception(type(error), error, error.__traceback__))
+    print(f"Error from {interaction.command.name} in {interaction.channel.name} called by {interaction.user.display_name}: {error_trace}")
 
     try:
         if isinstance(error, CommandChannelError):
             print("Channel check error raised")
             formatted_channel_list = error.formatted_channel_list
-
-            embed=discord.Embed(
+            embed = discord.Embed(
                 description=f"Sorry, you can only run this command out of: {formatted_channel_list}",
                 color=constants.EMBED_COLOUR_ERROR
             )
@@ -117,17 +119,16 @@ async def on_app_command_error(
             print("Role check error raised")
             permitted_roles = error.permitted_roles
             formatted_role_list = error.formatted_role_list
-            if len(permitted_roles)>1:
-                embed=discord.Embed(
+            if len(permitted_roles) > 1:
+                embed = discord.Embed(
                     description=f"**Permission denied**: You need one of the following roles to use this command:\n{formatted_role_list}",
                     color=constants.EMBED_COLOUR_ERROR
                 )
             else:
-                embed=discord.Embed(
+                embed = discord.Embed(
                     description=f"**Permission denied**: You need the following role to use this command:\n{formatted_role_list}",
                     color=constants.EMBED_COLOUR_ERROR
                 )
-            print("notify user")
             await interaction.response.send_message(embed=embed, ephemeral=True)
 
         elif isinstance(error, CustomError):
@@ -138,12 +139,12 @@ async def on_app_command_error(
                 description=f"❌ {message}",
                 color=constants.EMBED_COLOUR_ERROR
             )
-            if isprivate: # message should be ephemeral
+            if isprivate:
                 try:
                     await interaction.response.send_message(embed=embed, ephemeral=True)
                 except:
                     await interaction.followup.send(embed=embed, ephemeral=True)
-            else: # message should be public - use for CCO commands
+            else:
                 try:
                     await interaction.response.send_message(embed=embed)
                 except:
@@ -161,15 +162,12 @@ async def on_app_command_error(
                 await interaction.followup.send(embed=embed, ephemeral=True)
 
         else:
-            print("Othertype error message raised")
+            print(f"Unhandled error: {error_trace}")
             embed = discord.Embed(
-                description=f"❌ Unhandled Error: {error}",
+                description=f"❌ Unhandled Error:\n```{error_trace}```",
                 color=constants.EMBED_COLOUR_ERROR
             )
-            try:
-                await interaction.response.send_message(embed=embed, ephemeral=True)
-            except:
-                await interaction.followup.send(embed=embed, ephemeral=True)
+            await interaction.response.send_message(embed=embed, ephemeral=True)
 
     except Exception as e:
-        print(f"An error occurred in the error handler (lol): {e}")
+        print(f"An error occurred in the error handler: {e}")

@@ -57,6 +57,7 @@ class SpyPlaneCommands(commands.Cog):
     @app_commands.command(name='spy_plane_update_config', description='Update a configuration')
     @check_roles(constants.any_elevated_role)
     async def spy_plane_update_config(self, interaction: discord.Interaction, config_setting: str, config_value: str):
+        # TODO: Preload config options
         spam_channel = interaction.guild.get_channel(constants.channel_botspam())
         print(f'{interaction.user.name} called an update for the config {config_setting}')
         # check if config exists

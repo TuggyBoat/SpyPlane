@@ -11,7 +11,7 @@ from ptn.spyplane.database.database import get_last_tick
 from ptn.spyplane.constants import gc
 
 # Spreadsheet
-sheet = gc.open("Faction Scouting")
+sheet = gc.open("Faction Scouting - Dev")
 
 # Worksheet
 worksheet = sheet.get_worksheet_by_id(0)
@@ -21,6 +21,7 @@ values = worksheet.get_values('A:E')
 headers = values.pop(0)
 sheet_dataframe = pd.DataFrame(values, columns=headers)
 sheet_dataframe = sheet_dataframe[~sheet_dataframe['System'].str.startswith('#')]
+print(sheet_dataframe)
 
 
 def get_sheet_row(row_name):
@@ -57,6 +58,7 @@ def get_systems():
 
 async def post_list_by_priority():
     systems_list = get_systems()
+    print(systems_list)
     last_tick = int((await get_last_tick())[0].tick_time)
 
     api_check_systems = []

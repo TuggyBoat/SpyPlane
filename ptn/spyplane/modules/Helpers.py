@@ -1,10 +1,5 @@
 # imports
-import asyncio
-import pprint
-import time
-import urllib
 from datetime import datetime, timedelta
-from urllib.request import urlopen
 
 import discord
 import numpy
@@ -29,7 +24,10 @@ async def clear_scout_messages():
     # Clear messages
     messages = [message async for message in scout_channel.history(limit=None)]
     non_pinned_messages = [message for message in messages if not message.pinned]
-    await scout_channel.delete_messages(non_pinned_messages)
+    try:
+        await scout_channel.delete_messages(non_pinned_messages)
+    except Exception as e:
+        print("COULD NOT DELETE MESSAGES")
 
 
 """
